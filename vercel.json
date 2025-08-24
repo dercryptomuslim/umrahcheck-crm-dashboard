@@ -1,0 +1,42 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "NODE_OPTIONS='--max-old-space-size=4096' npm run build",
+  "installCommand": "npm install --legacy-peer-deps",
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods", 
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/dashboard/overview",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/hotel-search",
+      "destination": "/api/live-hotel-search"
+    }
+  ]
+}

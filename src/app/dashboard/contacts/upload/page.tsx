@@ -213,11 +213,11 @@ hassan.demo@example.com,Hassan,Khan,Hamburg,Germany,general,1000,2000,budget,csv
             <Input
               id='csv-file'
               type='file'
-              accept='.csv'
+              accept='.csv,text/csv,application/csv'
               onChange={handleFileSelect}
               ref={fileInputRef}
               disabled={isUploading}
-              className='mt-1'
+              className='file:bg-primary file:text-primary-foreground hover:file:bg-primary/80 mt-1 cursor-pointer file:cursor-pointer file:rounded-md file:border-0 file:px-3 file:py-2 file:text-sm file:font-medium'
             />
             {selectedFile && (
               <div className='mt-2 text-sm text-gray-600'>

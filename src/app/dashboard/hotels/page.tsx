@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
 import {
   IconRefresh,
   IconBell,
@@ -19,9 +18,7 @@ import {
   IconTrendingUp,
   IconMapPin,
   IconStar,
-  IconExternalLink,
-  IconCalendar,
-  IconUsers
+  IconExternalLink
 } from '@tabler/icons-react';
 import {
   LineChart,

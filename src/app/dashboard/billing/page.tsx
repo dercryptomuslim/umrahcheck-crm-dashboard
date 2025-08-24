@@ -214,7 +214,7 @@ export default function BillingPage() {
         <CardHeader>
           <CardTitle>📊 Available Plans</CardTitle>
           <CardDescription>
-            Choose the perfect plan for your agency's needs
+            Choose the perfect plan for your agency&apos;s needs
           </CardDescription>
 
           {/* Annual/Monthly Toggle */}

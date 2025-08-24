@@ -780,7 +780,7 @@ export async function POST(request: NextRequest) {
 }
 
 // GET method for testing
-export async function GET(request: NextRequest) {
+export async function GET() {
   return NextResponse.json({
     message: 'UmrahCheck Email Campaigns API',
     endpoint: 'POST /api/email-campaigns',

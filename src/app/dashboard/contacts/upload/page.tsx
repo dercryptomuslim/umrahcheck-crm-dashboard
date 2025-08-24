@@ -13,7 +13,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
 import {
   Upload,
   CheckCircle,
@@ -98,7 +97,6 @@ export default function ContactUploadPage() {
       const result = await response.json();
       setUploadResult(result);
     } catch (error) {
-      console.error('Upload error:', error);
       alert('Upload fehlgeschlagen. Bitte versuchen Sie es erneut.');
     } finally {
       setIsUploading(false);

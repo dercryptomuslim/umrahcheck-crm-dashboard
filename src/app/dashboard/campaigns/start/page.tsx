@@ -12,26 +12,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import {
-  Mail,
-  Send,
-  Users,
-  Eye,
-  ArrowLeft,
-  Calendar,
-  Clock,
-  Target
-} from 'lucide-react';
+import { Mail, Send, Eye, ArrowLeft, Calendar } from 'lucide-react';
 
 const campaignTemplates = [
   {
@@ -152,7 +135,6 @@ export default function StartCampaignPage() {
         router.push('/dashboard/campaigns');
       }, 1000);
     } catch (error) {
-      console.error('Campaign launch error:', error);
       alert(
         'Kampagne konnte nicht gestartet werden. Bitte versuchen Sie es erneut.'
       );
@@ -225,7 +207,7 @@ export default function StartCampaignPage() {
                           {template.description}
                         </p>
                         <p className='mb-2 text-xs text-gray-600'>
-                          Betreff: "{template.subject}"
+                          Betreff: &quot;{template.subject}&quot;
                         </p>
                         <div className='flex items-center gap-2'>
                           <Badge variant='outline'>

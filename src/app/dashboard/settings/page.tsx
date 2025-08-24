@@ -20,16 +20,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Settings,
-  User,
-  Bell,
-  Shield,
-  Mail,
-  Globe,
-  Key,
-  Palette
-} from 'lucide-react';
+import { Settings, User, Bell, Shield, Mail, Globe, Key } from 'lucide-react';
 
 export default function SettingsPage() {
   const [notifications, setNotifications] = useState({

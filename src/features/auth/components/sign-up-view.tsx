@@ -72,6 +72,16 @@ export default function SignUpViewPage({ stars }: { stars: number }) {
             </div>
           </Link>
           <ClerkSignUpForm
+            appearance={{
+              elements: {
+                formFieldInput__phoneNumber: 'hidden',
+                formFieldInput__firstName: 'hidden',
+                formFieldInput__lastName: 'hidden',
+                formFieldLabel__phoneNumber: 'hidden',
+                formFieldLabel__firstName: 'hidden',
+                formFieldLabel__lastName: 'hidden'
+              }
+            }}
             initialValues={{
               emailAddress: 'your_mail+clerk_test@example.com'
             }}

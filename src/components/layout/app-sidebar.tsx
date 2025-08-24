@@ -48,15 +48,15 @@ import * as React from 'react';
 import { Icons } from '../icons';
 import { OrgSwitcher } from '../org-switcher';
 export const company = {
-  name: 'Acme Inc',
+  name: 'UmrahCheck',
   logo: IconPhotoUp,
-  plan: 'Enterprise'
+  plan: 'Pro'
 };
 
 const tenants = [
-  { id: '1', name: 'Acme Inc' },
-  { id: '2', name: 'Beta Corp' },
-  { id: '3', name: 'Gamma Ltd' }
+  { id: '1', name: 'UmrahCheck CRM' },
+  { id: '2', name: 'UmrahCheck Pro' },
+  { id: '3', name: 'UmrahCheck Enterprise' }
 ];
 
 export default function AppSidebar() {

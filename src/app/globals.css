@@ -6,6 +6,13 @@
 
 @import './theme.css';
 
+/* Fix for browser extension hydration issues */
+body[cz-shortcut-listen='true'],
+body[data-new-gr-c-s-check-loaded],
+body[data-gr-ext-installed] {
+  /* Suppress browser extension attributes that cause hydration mismatches */
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);

@@ -11,7 +11,7 @@ export type Product = {
   updated_at: string;
 };
 
-//Info: The following data is used for the sidebar navigation and Cmd K bar.
+//Info: UmrahCheck CRM Navigation - Sidebar navigation and Cmd K bar.
 export const navItems: NavItem[] = [
   {
     title: 'Dashboard',
@@ -19,44 +19,64 @@ export const navItems: NavItem[] = [
     icon: 'dashboard',
     isActive: false,
     shortcut: ['d', 'd'],
-    items: [] // Empty array as there are no child items for Dashboard
+    items: []
   },
   {
-    title: 'Product',
-    url: '/dashboard/product',
-    icon: 'product',
-    shortcut: ['p', 'p'],
+    title: 'Email Contacts',
+    url: '/dashboard/contacts',
+    icon: 'user',
+    shortcut: ['c', 'c'],
     isActive: false,
-    items: [] // No child items
+    items: [
+      {
+        title: 'Alle Kontakte',
+        url: '/dashboard/contacts',
+        icon: 'user',
+        shortcut: ['c', 'a']
+      },
+      {
+        title: 'CSV Upload',
+        url: '/dashboard/contacts/upload',
+        icon: 'upload',
+        shortcut: ['c', 'u']
+      }
+    ]
+  },
+  {
+    title: 'Email Campaigns',
+    url: '/dashboard/campaigns',
+    icon: 'mail',
+    shortcut: ['e', 'e'],
+    isActive: false,
+    items: []
+  },
+  {
+    title: 'Hotel Prices',
+    url: '/dashboard/hotels',
+    icon: 'building',
+    shortcut: ['h', 'h'],
+    isActive: false,
+    items: []
   },
   {
     title: 'Account',
-    url: '#', // Placeholder as there is no direct link for the parent
+    url: '#',
     icon: 'billing',
     isActive: true,
-
     items: [
       {
         title: 'Profile',
         url: '/dashboard/profile',
         icon: 'userPen',
-        shortcut: ['m', 'm']
+        shortcut: ['p', 'p']
       },
       {
-        title: 'Login',
-        shortcut: ['l', 'l'],
-        url: '/',
-        icon: 'login'
+        title: 'Kanban',
+        url: '/dashboard/kanban',
+        icon: 'kanban',
+        shortcut: ['k', 'k']
       }
     ]
-  },
-  {
-    title: 'Kanban',
-    url: '/dashboard/kanban',
-    icon: 'kanban',
-    shortcut: ['k', 'k'],
-    isActive: false,
-    items: [] // No child items
   }
 ];
 

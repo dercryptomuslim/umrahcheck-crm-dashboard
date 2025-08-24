@@ -2,6 +2,7 @@ import Providers from '@/components/layout/providers';
 import { Toaster } from '@/components/ui/sonner';
 import { fontVariables } from '@/lib/font';
 import ThemeProvider from '@/components/layout/ThemeToggle/theme-provider';
+import BrowserExtensionFix from '@/components/browser-extension-fix';
 import { cn } from '@/lib/utils';
 import type { Metadata, Viewport } from 'next';
 import { cookies } from 'next/headers';
@@ -55,8 +56,10 @@ export default async function RootLayout({
           isScaled ? 'theme-scaled' : '',
           fontVariables
         )}
+        suppressHydrationWarning={true}
       >
         <NextTopLoader showSpinner={false} />
+        <BrowserExtensionFix />
         <NuqsAdapter>
           <ThemeProvider
             attribute='class'

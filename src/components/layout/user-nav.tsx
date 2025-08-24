@@ -42,11 +42,19 @@ export function UserNav() {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem onClick={() => router.push('/dashboard/profile')}>
-              Profile
+              👤 Profile
             </DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>New Team</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push('/dashboard/billing')}>
+              💳 Billing & Subscription
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => router.push('/dashboard/settings')}
+            >
+              ⚙️ Settings
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push('/dashboard/team')}>
+              👥 Team Management
+            </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem>

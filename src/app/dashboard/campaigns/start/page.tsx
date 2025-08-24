@@ -132,11 +132,9 @@ export default function StartCampaignPage() {
         },
         body: JSON.stringify({
           campaign_type: selectedTemplate,
-          campaign_name: campaignName,
-          audience_segment: selectedAudience,
-          schedule_type: scheduleType,
-          scheduled_date: scheduledDate,
-          recipient_count: selectedAudienceData?.count || 0
+          recipients: selectedAudienceData?.count || 0,
+          segment: selectedAudience,
+          language: 'de'
         })
       });
 

@@ -359,7 +359,7 @@ function getEmailTemplate(
     }
   };
 
-  const t = templates[language] || templates.de;
+  const t = templates[language as keyof typeof templates] || templates.de;
 
   switch (campaign_type) {
     case 'welcome_back':

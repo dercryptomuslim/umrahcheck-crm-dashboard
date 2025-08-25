@@ -34,7 +34,8 @@ import {
   IconMail,
   IconBuilding,
   IconUpload,
-  IconChartLine
+  IconChartLine,
+  IconBrain
 } from '@tabler/icons-react';
 
 export type Icon = React.ComponentType<IconProps>;
@@ -74,5 +75,6 @@ export const Icons = {
   mail: IconMail,
   building: IconBuilding,
   upload: IconUpload,
-  analytics: IconChartLine
+  analytics: IconChartLine,
+  ai: IconBrain
 };

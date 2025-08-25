@@ -67,6 +67,14 @@ export const navItems: NavItem[] = [
     items: []
   },
   {
+    title: 'AI Command Center',
+    url: '/dashboard/ai',
+    icon: 'ai',
+    shortcut: ['i', 'i'],
+    isActive: false,
+    items: []
+  },
+  {
     title: 'Account',
     url: '#',
     icon: 'billing',

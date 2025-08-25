@@ -59,6 +59,14 @@ export const navItems: NavItem[] = [
     items: []
   },
   {
+    title: 'Analytics',
+    url: '/dashboard/analytics',
+    icon: 'analytics',
+    shortcut: ['a', 'a'],
+    isActive: false,
+    items: []
+  },
+  {
     title: 'Account',
     url: '#',
     icon: 'billing',

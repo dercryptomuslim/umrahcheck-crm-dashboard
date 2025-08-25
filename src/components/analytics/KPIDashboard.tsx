@@ -26,8 +26,9 @@ interface KPIDashboardProps {
 
 interface KPIAPIResponse {
   ok: boolean;
-  data: KPIResponse;
-  meta: {
+  data?: KPIResponse;
+  error?: string;
+  meta?: {
     period: number;
     generated_at: string;
     tenant_id: string;
@@ -64,6 +65,10 @@ export function KPIDashboard({
 
       if (!result.ok) {
         throw new Error(result.error || 'API Error');
+      }
+
+      if (!result.data) {
+        throw new Error('No data received from API');
       }
 
       setData(result.data);

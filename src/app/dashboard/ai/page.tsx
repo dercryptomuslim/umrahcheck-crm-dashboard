@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LeadInsights } from '@/components/ai/LeadInsights';
+import { NaturalLanguageChat } from '@/components/ai/NaturalLanguageChat';
 import {
   Brain,
   Zap,
@@ -70,10 +71,10 @@ export default function AIPage() {
               <MessageSquare className='h-4 w-4 text-green-600' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold text-green-900'>
-                In Entwicklung
-              </div>
-              <p className='text-xs text-green-700'>Phase 3.2</p>
+              <div className='text-2xl font-bold text-green-900'>Aktiv</div>
+              <p className='text-xs text-green-700'>
+                Natural Language Interface
+              </p>
             </CardContent>
           </Card>
 
@@ -113,7 +114,6 @@ export default function AIPage() {
           <TabsTrigger
             value='natural-language'
             className='flex items-center gap-2'
-            disabled
           >
             <MessageSquare className='h-4 w-4' />
             NL Queries
@@ -165,36 +165,9 @@ export default function AIPage() {
           </Card>
         </TabsContent>
 
-        {/* Natural Language Tab - Coming Soon */}
+        {/* Natural Language Tab */}
         <TabsContent value='natural-language' className='space-y-6'>
-          <Card>
-            <CardHeader>
-              <CardTitle className='flex items-center gap-2'>
-                <MessageSquare className='h-5 w-5' />
-                Natural Language Queries
-              </CardTitle>
-            </CardHeader>
-            <CardContent className='py-12'>
-              <div className='space-y-4 text-center'>
-                <div className='mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100'>
-                  <Bot className='h-8 w-8 text-green-600' />
-                </div>
-                <h3 className='text-xl font-semibold'>
-                  Natural Language Interface kommt in Phase 3.2
-                </h3>
-                <p className='text-muted-foreground mx-auto max-w-md'>
-                  Stellen Sie Fragen in natürlicher Sprache und erhalten Sie
-                  sofort Antworten aus Ihren CRM-Daten. Beispiel: &quot;Zeige
-                  mir alle heißen Leads aus Deutschland der letzten Woche&quot;
-                </p>
-                <div className='pt-4'>
-                  <Button variant='outline' disabled>
-                    In Entwicklung
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <NaturalLanguageChat />
         </TabsContent>
 
         {/* Recommendations Tab - Coming Soon */}

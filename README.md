@@ -13,39 +13,108 @@
 
 ## Overview
 
-This is a starter template using the following stack:
+UmrahCheck CRM Dashboard - Enterprise-level Customer Relationship Management system for Umrah travel agencies with AI-powered lead scoring and natural language query interface.
 
-- Framework - [Next.js 15](https://nextjs.org/13)
-- Language - [TypeScript](https://www.typescriptlang.org)
-- Auth - [Clerk](https://go.clerk.com/ILdYhn7)
-- Error tracking - [<picture><img alt="Sentry" src="public/assets/sentry.svg">
-        </picture>](https://sentry.io/for/nextjs/?utm_source=github&utm_medium=paid-community&utm_campaign=general-fy26q2-nextjs&utm_content=github-banner-project-tryfree)
+## Tech Stack
+
+- Framework - [Next.js 15](https://nextjs.org/13) with App Router
+- Language - [TypeScript](https://www.typescriptlang.org) (strict mode)
+- Auth - [Clerk](https://go.clerk.com/ILdYhn7) with RBAC
+- Database - [Supabase](https://supabase.com) (PostgreSQL)
 - Styling - [Tailwind CSS v4](https://tailwindcss.com)
 - Components - [Shadcn-ui](https://ui.shadcn.com)
 - Schema Validations - [Zod](https://zod.dev)
 - State Management - [Zustand](https://zustand-demo.pmnd.rs)
-- Search params state manager - [Nuqs](https://nuqs.47ng.com/)
-- Tables - [Tanstack Data Tables](https://ui.shadcn.com/docs/components/data-table) • [Dice table](https://www.diceui.com/docs/components/data-table)
+- Search params - [Nuqs](https://nuqs.47ng.com/)
+- Tables - [Tanstack Data Tables](https://ui.shadcn.com/docs/components/data-table)
 - Forms - [React Hook Form](https://ui.shadcn.com/docs/components/form)
-- Command+k interface - [kbar](https://kbar.vercel.app/)
+- AI/ML - Natural Language Processing + Query Intelligence
+- Email - [Resend](https://resend.com)
+- Testing - [Vitest](https://vitest.dev) + [Playwright](https://playwright.dev)
+- Error tracking - [Sentry](https://sentry.io)
 - Linting - [ESLint](https://eslint.org)
 - Pre-commit Hooks - [Husky](https://typicode.github.io/husky/)
 - Formatting - [Prettier](https://prettier.io)
 
 _If you are looking for a Tanstack start dashboard template, here is the [repo](https://git.new/tanstack-start-dashboard)._
 
+## Features
+
+### Core CRM Features
+- **Contact Management** - Complete customer 360° view with engagement tracking
+- **Lead Scoring** - AI-powered ML-based lead qualification with confidence scoring
+- **Analytics Dashboard** - Real-time KPI tracking and business intelligence
+- **Booking Management** - End-to-end reservation and payment processing
+- **Email Campaigns** - Automated marketing campaigns with engagement tracking
+- **Live Hotel Search** - Real-time hotel availability and pricing integration
+
+### AI-Powered Features
+- **Natural Language Queries** - Ask questions about your data in German/English
+- **Lead Insights** - Intelligent lead analysis with ML algorithms
+- **Predictive Analytics** - Revenue forecasting and churn prediction (Phase 3.3)
+- **Smart Recommendations** - AI-driven optimization suggestions (Phase 3.4)
+
+### Technical Features
+- **Multi-tenant Architecture** - Secure tenant isolation with RLS
+- **Role-based Access Control** - Admin, Agent, Customer role hierarchy
+- **Real-time Updates** - Live data synchronization across clients
+- **Responsive Design** - Mobile-first design with accessibility support
+- **Advanced Search** - Full-text search with filters and facets
+- **API-first Architecture** - RESTful APIs with OpenAPI documentation
+- **Comprehensive Testing** - Unit tests, E2E tests, and performance monitoring
+
 ## Pages
 
-| Pages                                                                                 | Specifications                                                                                                                                                                                                                                                          |
-| :------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Signup / Signin](https://go.clerk.com/ILdYhn7)      | Authentication with **Clerk** provides secure authentication and user management with multiple sign-in options including passwordless authentication, social logins, and enterprise SSO - all designed to enhance security while delivering a seamless user experience. |
-| [Dashboard (Overview)](https://shadcn-dashboard.kiranism.dev/dashboard)    | Cards with Recharts graphs for analytics. Parallel routes in the overview sections feature independent loading, error handling, and isolated component rendering. |
-| [Product](https://shadcn-dashboard.kiranism.dev/dashboard/product)         | Tanstack tables with server side searching, filter, pagination by Nuqs which is a Type-safe search params state manager in nextjs                                                                                                                                       |
-| [Product/new](https://shadcn-dashboard.kiranism.dev/dashboard/product/new) | A Product Form with shadcn form (react-hook-form + zod).                                                                                                                                                                                                                |
-| [Profile](https://shadcn-dashboard.kiranism.dev/dashboard/profile)         | Clerk's full-featured account management UI that allows users to manage their profile and security settings                                                                                                                                                             |
-| [Kanban Board](https://shadcn-dashboard.kiranism.dev/dashboard/kanban)     | A Drag n Drop task management board with dnd-kit and zustand to persist state locally.                                                                                                                                                                                  |
-| [Not Found](https://shadcn-dashboard.kiranism.dev/dashboard/notfound)      | Not Found Page Added in the root level                                                                                                                                                                                                                                  |
-| [Global Error](https://sentry.io/for/nextjs/?utm_source=github&utm_medium=paid-community&utm_campaign=general-fy26q2-nextjs&utm_content=github-banner-project-tryfree)           | A centralized error page that captures and displays errors across the application. Integrated with **Sentry** to log errors, provide detailed reports, and enable replay functionality for better debugging. |
+| Pages | Specifications |
+| :---- | :------------- |
+| **Authentication** | Clerk-powered auth with SSO, MFA, and session management |
+| **Dashboard Overview** | Real-time KPIs, revenue analytics, and performance metrics |
+| **Contacts** | Contact management with Customer 360° view and engagement timeline |
+| **AI Command Center** | Natural Language Query interface, Lead Insights, and AI analytics |
+| **Analytics** | Advanced business intelligence with interactive charts and reports |
+| **Bookings** | Comprehensive booking management with payment processing |
+| **Email Campaigns** | Campaign builder, template management, and performance tracking |
+| **Settings** | User management, tenant configuration, and system preferences |
+
+## AI Query Interface Setup
+
+### Natural Language Query Examples
+
+The AI Command Center supports natural language queries in German and English:
+
+**German Examples:**
+```
+"Zeige mir alle heißen Leads aus Deutschland der letzten Woche"
+"Wie viele Buchungen haben wir diesen Monat?"
+"Welcher Umsatz wurde in den letzten 30 Tagen generiert?"
+"Liste alle Kontakte mit Budget über 3000 EUR"
+"Zeige mir stornierte Buchungen der letzten 7 Tage"
+```
+
+**English Examples:**
+```
+"Show me all hot leads from Germany in the last week"
+"How many bookings do we have this month?"
+"What revenue was generated in the last 30 days?"
+"List all contacts with budget over 3000 EUR"
+"Show me cancelled bookings from the last 7 days"
+```
+
+### Supported Query Types
+- **Leads**: Lead management, scoring, filtering by status, country, budget
+- **Bookings**: Reservation tracking, revenue analysis, cancellation management
+- **Revenue**: Financial analytics, profit calculations, period comparisons
+- **Contacts**: Customer management, segmentation, engagement tracking
+- **Analytics**: Business intelligence, performance metrics, trend analysis
+
+## Database Migrations
+
+### AI Query Interface Tables
+```sql
+-- Run these migrations for AI functionality:
+db/migrations/20241225_add_ai_conversations.sql
+db/migrations/20241225_add_safe_query_function.sql
+```
 
 ## Feature based organization
 

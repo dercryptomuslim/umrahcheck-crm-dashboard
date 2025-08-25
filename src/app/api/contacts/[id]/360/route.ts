@@ -35,12 +35,13 @@ async function getAuthContext() {
 // GET /api/contacts/[id]/360
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // 1. Authenticate user
     const authContext = await getAuthContext();
-    const contactId = params.id;
+    const resolvedParams = await params;
+    const contactId = resolvedParams.id;
 
     // Validate UUID format
     const uuidRegex =
@@ -159,11 +160,12 @@ export async function GET(
 // PUT /api/contacts/[id]/360 - Update contact
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const authContext = await getAuthContext();
-    const contactId = params.id;
+    const resolvedParams = await params;
+    const contactId = resolvedParams.id;
     const updates = await request.json();
 
     // Remove read-only fields

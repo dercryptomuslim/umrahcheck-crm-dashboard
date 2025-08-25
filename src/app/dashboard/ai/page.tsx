@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LeadInsights } from '@/components/ai/LeadInsights';
 import { NaturalLanguageChat } from '@/components/ai/NaturalLanguageChat';
+import { PredictiveAnalytics } from '@/components/ai/PredictiveAnalytics';
 import {
   Brain,
   Zap,
@@ -58,8 +59,8 @@ export default function AIPage() {
               <TrendingUp className='h-4 w-4 text-blue-600' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold text-blue-900'>Bereit</div>
-              <p className='text-xs text-blue-700'>Kommt in Phase 3.3</p>
+              <div className='text-2xl font-bold text-blue-900'>Aktiv</div>
+              <p className='text-xs text-blue-700'>Revenue & Churn ML Models</p>
             </CardContent>
           </Card>
 
@@ -103,11 +104,7 @@ export default function AIPage() {
             <Zap className='h-4 w-4' />
             Lead Insights
           </TabsTrigger>
-          <TabsTrigger
-            value='predictions'
-            className='flex items-center gap-2'
-            disabled
-          >
+          <TabsTrigger value='predictions' className='flex items-center gap-2'>
             <TrendingUp className='h-4 w-4' />
             Predictions
           </TabsTrigger>
@@ -133,36 +130,9 @@ export default function AIPage() {
           <LeadInsights />
         </TabsContent>
 
-        {/* Predictions Tab - Coming Soon */}
+        {/* Predictions Tab - Predictive Analytics */}
         <TabsContent value='predictions' className='space-y-6'>
-          <Card>
-            <CardHeader>
-              <CardTitle className='flex items-center gap-2'>
-                <TrendingUp className='h-5 w-5' />
-                Predictive Analytics
-              </CardTitle>
-            </CardHeader>
-            <CardContent className='py-12'>
-              <div className='space-y-4 text-center'>
-                <div className='mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-100'>
-                  <Cpu className='h-8 w-8 text-blue-600' />
-                </div>
-                <h3 className='text-xl font-semibold'>
-                  Predictive Analytics kommt in Phase 3.3
-                </h3>
-                <p className='text-muted-foreground mx-auto max-w-md'>
-                  Vorhersagen für Revenue, Churn Rate, Lead Conversion und
-                  Booking Trends basierend auf historischen Daten und Machine
-                  Learning Modellen.
-                </p>
-                <div className='pt-4'>
-                  <Button variant='outline' disabled>
-                    In Entwicklung
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <PredictiveAnalytics />
         </TabsContent>
 
         {/* Natural Language Tab */}
@@ -206,8 +176,8 @@ export default function AIPage() {
       {/* Footer Info */}
       <div className='text-muted-foreground border-t pt-6 text-center text-sm'>
         <p>
-          🤖 AI Command Center • Phase 3.1 Implementation • Machine Learning
-          Lead Scoring aktiv
+          🤖 AI Command Center • Phase 3.3 Implementation • ML Lead Scoring, NL
+          Queries & Predictive Analytics aktiv
         </p>
         <p className='mt-1'>
           Powered by Advanced AI Algorithms & Customer 360° Data Platform

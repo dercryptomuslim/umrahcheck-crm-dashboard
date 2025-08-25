@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { LeadInsights } from '@/components/ai/LeadInsights';
 import { NaturalLanguageChat } from '@/components/ai/NaturalLanguageChat';
 import { PredictiveAnalytics } from '@/components/ai/PredictiveAnalytics';
+import { SmartRecommendations } from '@/components/ai/SmartRecommendations';
 import {
   Brain,
   Zap,
@@ -87,8 +88,10 @@ export default function AIPage() {
               <Lightbulb className='h-4 w-4 text-orange-600' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold text-orange-900'>Geplant</div>
-              <p className='text-xs text-orange-700'>Phase 3.4</p>
+              <div className='text-2xl font-bold text-orange-900'>Aktiv</div>
+              <p className='text-xs text-orange-700'>
+                AI-powered Recommendations
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -118,7 +121,6 @@ export default function AIPage() {
           <TabsTrigger
             value='recommendations'
             className='flex items-center gap-2'
-            disabled
           >
             <Lightbulb className='h-4 w-4' />
             Empfehlungen
@@ -140,44 +142,17 @@ export default function AIPage() {
           <NaturalLanguageChat />
         </TabsContent>
 
-        {/* Recommendations Tab - Coming Soon */}
+        {/* Recommendations Tab - Smart Recommendations */}
         <TabsContent value='recommendations' className='space-y-6'>
-          <Card>
-            <CardHeader>
-              <CardTitle className='flex items-center gap-2'>
-                <Lightbulb className='h-5 w-5' />
-                Smart Recommendations Engine
-              </CardTitle>
-            </CardHeader>
-            <CardContent className='py-12'>
-              <div className='space-y-4 text-center'>
-                <div className='mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-orange-100'>
-                  <Activity className='h-8 w-8 text-orange-600' />
-                </div>
-                <h3 className='text-xl font-semibold'>
-                  Smart Recommendations kommen in Phase 3.4
-                </h3>
-                <p className='text-muted-foreground mx-auto max-w-md'>
-                  Personalisierte Empfehlungen für optimale Kundenansprache,
-                  Best Practices und automatisierte Workflows basierend auf
-                  erfolgreichen Mustern.
-                </p>
-                <div className='pt-4'>
-                  <Button variant='outline' disabled>
-                    Geplant
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <SmartRecommendations />
         </TabsContent>
       </Tabs>
 
       {/* Footer Info */}
       <div className='text-muted-foreground border-t pt-6 text-center text-sm'>
         <p>
-          🤖 AI Command Center • Phase 3.3 Implementation • ML Lead Scoring, NL
-          Queries & Predictive Analytics aktiv
+          🤖 AI Command Center • Phase 3.4 Complete • ML Lead Scoring, NL
+          Queries, Predictive Analytics & Smart Recommendations aktiv
         </p>
         <p className='mt-1'>
           Powered by Advanced AI Algorithms & Customer 360° Data Platform

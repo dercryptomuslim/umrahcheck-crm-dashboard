@@ -184,8 +184,8 @@ export default function AIPage() {
                 </h3>
                 <p className='text-muted-foreground mx-auto max-w-md'>
                   Stellen Sie Fragen in natürlicher Sprache und erhalten Sie
-                  sofort Antworten aus Ihren CRM-Daten. Beispiel: "Zeige mir
-                  alle heißen Leads aus Deutschland der letzten Woche"
+                  sofort Antworten aus Ihren CRM-Daten. Beispiel: &quot;Zeige
+                  mir alle heißen Leads aus Deutschland der letzten Woche&quot;
                 </p>
                 <div className='pt-4'>
                   <Button variant='outline' disabled>

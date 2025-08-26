@@ -243,7 +243,7 @@ async function fetchHistoricalRevenueData(
   // Convert to RevenueDataPoint array
   const revenueData: RevenueDataPoint[] = [];
 
-  for (const [dateString, data] of dailyRevenue.entries()) {
+  for (const [dateString, data] of Array.from(dailyRevenue.entries())) {
     const averageOrderValue = data.total / data.count;
 
     revenueData.push({

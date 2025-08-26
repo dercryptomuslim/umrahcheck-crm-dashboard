@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>UmrahCheck – Kompakte Packliste</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.25;
+      color: #1a202c;
+      background: #f8f9fa;
+      font-size: 12px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    /* Header ultra-kompakt */
+    .header {
+      background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+      padding: 12px 20px;
+      text-align: center;
+      position: relative;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="1.5" fill="rgba(255,255,255,0.15)"/></svg>');
+      opacity: 0.3;
+    }
+    .logo-section { position: relative; z-index: 2; }
+    .logo-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 4px; }
+    .logo-image { height: 28px; width: auto; border-radius: 6px; filter: brightness(0) invert(1); }
+    .brand-subtitle { font-size: 12px; font-weight: 600; color: #fff; margin-bottom: 2px; }
+    .premium-badge {
+      display: inline-block; background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3); padding: 2px 8px; border-radius: 999px;
+      font-size: 10px; font-weight: 800; color: #ffffff; text-transform: uppercase;
+    }
+    
+    /* Content ultra-kompakt */
+    .content { padding: 10px 16px; }
+    .exclusive-offer {
+      text-align: center; margin-bottom: 8px; padding: 6px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 6px; border-left: 2px solid #d4af37;
+    }
+    .exclusive-title { font-size: 15px; font-weight: 800; color: #1a202c; margin-bottom: 2px; }
+    .exclusive-text { font-size: 10px; color: #4a5568; }
+    
+    /* Controls ultra-kompakt */
+    .controls { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 8px; justify-content: center; }
+    .btn {
+      border: none; cursor: pointer; padding: 4px 8px; border-radius: 4px;
+      font-weight: 700; font-size: 10px; transition: transform .05s;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-gold { background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%); color: #fff; }
+    .btn-dark { background: #1a202c; color: #fff; }
+    .btn-light { background: #edf2f7; color: #1a202c; }
+    
+    /* 3-Spalten Grid für maximale Kompaktheit */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    
+    /* Ultra-kompakte Sektionen */
+    section { margin: 4px 0; page-break-inside: avoid; }
+    h2 { 
+      font-size: 12px; font-weight: 800; color: #1a202c; 
+      margin-bottom: 4px; display: flex; align-items: center; gap: 4px;
+      padding-bottom: 2px; border-bottom: 1px solid #e2e8f0;
+    }
+    
+    /* Ultra-kompakte Checkliste */
+    .checklist {
+      list-style: none; border: 1px solid #e2e8f0; border-radius: 4px; 
+      padding: 2px; background: #fafafa;
+    }
+    .checklist li {
+      display: flex; align-items: center; gap: 4px; padding: 2px 4px;
+      border-bottom: 1px solid #f0f0f0; font-size: 10px;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist input[type="checkbox"] {
+      width: 12px; height: 12px; cursor: pointer; accent-color: #d4af37; flex: 0 0 auto;
+    }
+    .item-label { flex: 1; line-height: 1.2; }
+    .subtle { color: #6b7280; font-size: 9px; }
+    .badge { font-size: 8px; padding: 1px 3px; border-radius: 999px; background: #f0f8ff; color: #4a90e2; margin-left: 3px; }
+    
+    /* Footer ultra-kompakt */
+    .footer { 
+      background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%); 
+      color: #ffffff; padding: 8px; text-align: center; 
+    }
+    .footer-brand { font-size: 14px; font-weight: 800; color: #d4af37; margin-bottom: 2px; }
+    .footer-text { font-size: 9px; color: #cbd5e0; margin-bottom: 4px; }
+    .footer-contact { font-size: 8px; color: #e2e8f0; }
+    
+    /* Responsive */
+    @media (max-width: 1000px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 700px) { 
+      .grid-3 { grid-template-columns: 1fr; }
+      .container { margin: 4px; }
+      .content { padding: 12px; }
+    }
+    
+    /* Print-optimiert für genau 1 A4-Seite */
+    @page { size: A4; margin: 6mm; }
+    @media print {
+      body { font-size: 9px !important; background: #fff; line-height: 1.1 !important; }
+      .controls { display: none !important; }
+      .container { box-shadow: none; border-radius: 0; }
+      .header { padding: 6px !important; }
+      .content { padding: 4px !important; }
+      .exclusive-offer { margin-bottom: 3px !important; padding: 3px !important; }
+      .exclusive-title { font-size: 12px !important; }
+      .exclusive-text { font-size: 8px !important; }
+      .checklist { padding: 1px !important; }
+      .checklist li { padding: 1px 2px !important; font-size: 8px !important; }
+      .checklist input[type="checkbox"] { width: 10px !important; height: 10px !important; }
+      .footer { padding: 4px !important; }
+      .footer-brand { font-size: 11px !important; margin-bottom: 1px !important; }
+      .footer-text { font-size: 7px !important; margin-bottom: 2px !important; }
+      .footer-contact { font-size: 7px !important; }
+      .grid-3 { gap: 4px !important; }
+      section { margin: 2px 0 !important; }
+      h2 { font-size: 10px !important; margin-bottom: 2px !important; padding-bottom: 1px !important; }
+      .subtle { font-size: 7px !important; }
+      .badge { font-size: 6px !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo-section">
+        <div class="logo-container">
+          <img 
+            src="https://cdn.prod.website-files.com/68146c25b4c094b8f3f451f5/684e18f6c8ac8e9384268ae7_umrahcheck_logo.jpg.png"
+            alt="UmrahCheck Logo"
+            class="logo-image"
+          >
+        </div>
+        <p class="brand-subtitle">Die erste KI-Beratung für deine Umrah</p>
+        <span class="premium-badge">Kompakte Packliste</span>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="exclusive-offer">
+        <h1 class="exclusive-title">🕋 Umrah Packliste – Ultra-Kompakt</h1>
+        <p class="exclusive-text">
+          Optimiert für max. 1-2 A4-Seiten • Fortschritt wird automatisch gespeichert
+        </p>
+        <div class="controls">
+          <button class="btn btn-gold" onclick="window.print()">🖨️ Drucken</button>
+          <button class="btn btn-dark" onclick="toggleAll(true)">✓ Alle</button>
+          <button class="btn btn-light" onclick="toggleAll(false)">Reset</button>
+          <button class="btn btn-light" onclick="clearStorage()">Löschen</button>
+        </div>
+      </section>
+
+      <!-- 3-Spalten Layout für maximale Kompaktheit -->
+      <div class="grid-3">
+        
+        <!-- Spalte 1: Dokumente & Kleidung -->
+        <div>
+          <section>
+            <h2>📄 Dokumente</h2>
+            <ul class="checklist">
+              <li><input type="checkbox" id="reisepass"><label class="item-label" for="reisepass">Reisepass <span class="subtle">(6+ Mon.)</span></label></li>
+              <li><input type="checkbox" id="evisa"><label class="item-label" for="evisa">eVisa Ausdruck</label></li>
+              <li><input type="checkbox" id="flugtickets"><label class="item-label" for="flugtickets">Flugtickets</label></li>
+              <li><input type="checkbox" id="hotel"><label class="item-label" for="hotel">Hotelbestätigung</label></li>
+              <li><input type="checkbox" id="versicherung"><label class="item-label" for="versicherung">Reiseversicherung</label></li>
+              <li><input type="checkbox" id="kopien"><label class="item-label" for="kopien">Kopien aller Docs</label></li>
+              <li><input type="checkbox" id="bargeld"><label class="item-label" for="bargeld">Bargeld (SAR/EUR)</label></li>
+              <li><input type="checkbox" id="karten"><label class="item-label" for="karten">2x Kreditkarten</label></li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>👕 Kleidung</h2>
+            <ul class="checklist">
+              <li><input type="checkbox" id="ihram"><label class="item-label" for="ihram">Ihram (3 Sets) <span class="badge">♂</span></label></li>
+              <li><input type="checkbox" id="abaya"><label class="item-label" for="abaya">Abaya (schwarz) <span class="badge">♀</span></label></li>
+              <li><input type="checkbox" id="hijab"><label class="item-label" for="hijab">Hijab/Kopftücher</label></li>
+              <li><input type="checkbox" id="hosen"><label class="item-label" for="hosen">Lange Hosen (3x)</label></li>
+              <li><input type="checkbox" id="oberteile"><label class="item-label" for="oberteile">Langarm-Shirts (5x)</label></li>
+              <li><input type="checkbox" id="sandalen"><label class="item-label" for="sandalen">Sandalen <span class="subtle">ohne Ferse</span></label></li>
+              <li><input type="checkbox" id="schuhe"><label class="item-label" for="schuhe">Laufschuhe</label></li>
+              <li><input type="checkbox" id="socken"><label class="item-label" for="socken">Socken (rutschfest)</label></li>
+              <li><input type="checkbox" id="unterwaesche"><label class="item-label" for="unterwaesche">Unterwäsche (8x)</label></li>
+              <li><input type="checkbox" id="schlaf"><label class="item-label" for="schlaf">Schlafanzug</label></li>
+            </ul>
+          </section>
+        </div>
+
+        <!-- Spalte 2: Hygiene & Gesundheit -->
+        <div>
+          <section>
+            <h2>🧴 Hygiene</h2>
+            <ul class="checklist">
+              <li><input type="checkbox" id="zahnzeug"><label class="item-label" for="zahnzeug">Zahnbürste + Pasta</label></li>
+              <li><input type="checkbox" id="shampoo"><label class="item-label" for="shampoo">Shampoo <span class="subtle">parfümfrei</span></label></li>
+              <li><input type="checkbox" id="seife"><label class="item-label" for="seife">Seife <span class="subtle">parfümfrei</span></label></li>
+              <li><input type="checkbox" id="deo"><label class="item-label" for="deo">Deo <span class="subtle">alkoholfrei</span></label></li>
+              <li><input type="checkbox" id="handtuch"><label class="item-label" for="handtuch">Handtücher (2x)</label></li>
+              <li><input type="checkbox" id="damenhygiene"><label class="item-label" for="damenhygiene">Damenhygiene</label></li>
+              <li><input type="checkbox" id="rasur"><label class="item-label" for="rasur">Rasierzeug</label></li>
+              <li><input type="checkbox" id="nagel"><label class="item-label" for="nagel">Nagelschere</label></li>
+              <li><input type="checkbox" id="sonnencreme"><label class="item-label" for="sonnencreme">Sonnencreme LSF30+</label></li>
+              <li><input type="checkbox" id="feuchttuecher"><label class="item-label" for="feuchttuecher">Feuchttücher</label></li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>🩺 Gesundheit</h2>
+            <ul class="checklist">
+              <li><input type="checkbox" id="medis"><label class="item-label" for="medis">Eigene Medikamente</label></li>
+              <li><input type="checkbox" id="schmerz"><label class="item-label" for="schmerz">Schmerztabletten</label></li>
+              <li><input type="checkbox" id="durchfall"><label class="item-label" for="durchfall">Durchfallmittel</label></li>
+              <li><input type="checkbox" id="erkaeltung"><label class="item-label" for="erkaeltung">Erkältungsmedizin</label></li>
+              <li><input type="checkbox" id="desinfektion"><label class="item-label" for="desinfektion">Desinfektionsmittel</label></li>
+              <li><input type="checkbox" id="pflaster"><label class="item-label" for="pflaster">Pflaster + Verbände</label></li>
+              <li><input type="checkbox" id="augen"><label class="item-label" for="augen">Augentropfen <span class="subtle">Sand</span></label></li>
+              <li><input type="checkbox" id="blasen"><label class="item-label" for="blasen">Blasenpflaster</label></li>
+              <li><input type="checkbox" id="vitamine"><label class="item-label" for="vitamine">Vitamine</label></li>
+              <li><input type="checkbox" id="elektrolyte"><label class="item-label" for="elektrolyte">Elektrolyte-Pulver</label></li>
+            </ul>
+          </section>
+        </div>
+
+        <!-- Spalte 3: Ibadah & Elektronik -->
+        <div>
+          <section>
+            <h2>🕋 Ibadah</h2>
+            <ul class="checklist">
+              <li><input type="checkbox" id="quran"><label class="item-label" for="quran">Qur'an <span class="subtle">(klein)</span></label></li>
+              <li><input type="checkbox" id="duabuch"><label class="item-label" for="duabuch">Duabuch DE/AR</label></li>
+              <li><input type="checkbox" id="tasbih"><label class="item-label" for="tasbih">Tasbih</label></li>
+              <li><input type="checkbox" id="teppich"><label class="item-label" for="teppich">Gebetsteppich</label></li>
+              <li><input type="checkbox" id="qibla_app"><label class="item-label" for="qibla_app">Qibla App</label></li>
+              <li><input type="checkbox" id="gebet_app"><label class="item-label" for="gebet_app">Gebetszeiten App</label></li>
+              <li><input type="checkbox" id="dhikr"><label class="item-label" for="dhikr">Dhikr-Buch</label></li>
+              <li><input type="checkbox" id="duas_umrah"><label class="item-label" for="duas_umrah">Umrah-Duas</label></li>
+              <li><input type="checkbox" id="dua_karten"><label class="item-label" for="dua_karten">Dua-Karten</label></li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>📱 Elektronik</h2>
+            <ul class="checklist">
+              <li><input type="checkbox" id="handy"><label class="item-label" for="handy">Smartphone + Kabel</label></li>
+              <li><input type="checkbox" id="powerbank"><label class="item-label" for="powerbank">Powerbank 20.000mAh</label></li>
+              <li><input type="checkbox" id="adapter"><label class="item-label" for="adapter">Universal-Adapter</label></li>
+              <li><input type="checkbox" id="mehrfach"><label class="item-label" for="mehrfach">Mehrfachsteckdose</label></li>
+              <li><input type="checkbox" id="ersatzkabel"><label class="item-label" for="ersatzkabel">Ersatz-Ladekabel</label></li>
+              <li><input type="checkbox" id="sim"><label class="item-label" for="sim">Saudi SIM-Karte</label></li>
+              <li><input type="checkbox" id="kopfhoerer"><label class="item-label" for="kopfhoerer">Kopfhörer</label></li>
+              <li><input type="checkbox" id="lampe"><label class="item-label" for="lampe">Taschenlampe</label></li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>🥜 Extras</h2>
+            <ul class="checklist">
+              <li><input type="checkbox" id="nuesse"><label class="item-label" for="nuesse">Nüsse + Datteln</label></li>
+              <li><input type="checkbox" id="riegel"><label class="item-label" for="riegel">Energieriegel</label></li>
+              <li><input type="checkbox" id="flasche"><label class="item-label" for="flasche">Wasserflasche</label></li>
+              <li><input type="checkbox" id="honig"><label class="item-label" for="honig">Honig <span class="subtle">(klein)</span></label></li>
+              <li><input type="checkbox" id="kaffee"><label class="item-label" for="kaffee">Instant-Kaffee</label></li>
+              <li><input type="checkbox" id="regenschutz"><label class="item-label" for="regenschutz">Regenschirm</label></li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-brand">🕋 UMRAHCHECK</div>
+      <p class="footer-text">Die erste KI-Beratung für deine Umrah – ehrlich, transparent &amp; individuell</p>
+      <div class="footer-contact">
+        <strong>Barakallahu feek, Dein UmrahCheck-Team</strong><br>
+        🌐 <strong>www.umrahcheck.de</strong> | Erstellt: <time id="datum"></time>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Datum setzen
+    document.getElementById('datum').textContent = new Date().toLocaleDateString('de-DE');
+    document.getElementById('datum').setAttribute('datetime', new Date().toISOString().split('T')[0]);
+
+    const STORE_KEY = 'umrahcheck-ultra-compact-v1';
+
+    // Zustand laden
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+        Object.entries(saved).forEach(([id, checked]) => {
+          const el = document.getElementById(id);
+          if (el && el.type === 'checkbox') el.checked = !!checked;
+        });
+      } catch (e) { console.warn('Laden fehlgeschlagen:', e); }
+    }
+
+    // Zustand speichern
+    function saveState() {
+      const state = {};
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => state[cb.id] = cb.checked);
+      try {
+        localStorage.setItem(STORE_KEY, JSON.stringify(state));
+      } catch (e) { console.warn('Speichern fehlgeschlagen:', e); }
+    }
+
+    // Alle abhaken/zurücksetzen
+    function toggleAll(value) {
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = value);
+      saveState();
+    }
+
+    // Speicher löschen
+    function clearStorage() {
+      localStorage.removeItem(STORE_KEY);
+      toggleAll(false);
+    }
+
+    // Events
+    document.addEventListener('DOMContentLoaded', loadState);
+    document.body.addEventListener('change', (e) => {
+      if (e.target?.matches('input[type="checkbox"]')) saveState();
+    });
+  </script>
+</body>
+</html>

@@ -122,23 +122,31 @@ export default function ContactsPage() {
       {/* Header */}
       <div className='flex items-center justify-between'>
         <div>
-          <h1 className='text-3xl font-bold'>Email Contacts</h1>
+          <h1 className='text-3xl font-bold'>🧑‍🤝‍🧑 Reisende verwalten</h1>
           <p className='text-muted-foreground'>
-            Manage your 10,000+ Muslim travel contacts
+            Verwalten Sie über 10.000 islamische Reisekontakte für Umrah & Hajj
           </p>
         </div>
         <div className='flex gap-2'>
-          <Button variant='outline'>
+          <Button
+            variant='outline'
+            onClick={() =>
+              (window.location.href = '/dashboard/contacts/upload')
+            }
+          >
             <IconFileImport className='mr-2 h-4 w-4' />
-            Import CSV
+            CSV Daten hochladen
           </Button>
           <Button variant='outline'>
             <IconUserPlus className='mr-2 h-4 w-4' />
-            Add Contact
+            Neuer Kontakt
           </Button>
-          <Button className='bg-green-600 hover:bg-green-700'>
+          <Button
+            className='bg-green-600 hover:bg-green-700'
+            disabled={selectedContacts.length === 0}
+          >
             <IconSend className='mr-2 h-4 w-4' />
-            Send Campaign
+            E-Mail senden ({selectedContacts.length})
           </Button>
         </div>
       </div>
@@ -146,20 +154,20 @@ export default function ContactsPage() {
       {/* Stats Cards */}
       <div className='grid grid-cols-4 gap-4'>
         <div className='bg-card rounded-lg border p-4'>
-          <div className='text-2xl font-bold'>10,247</div>
-          <div className='text-muted-foreground text-sm'>Total Contacts</div>
+          <div className='text-2xl font-bold'>10.247</div>
+          <div className='text-muted-foreground text-sm'>Gesamte Kontakte</div>
         </div>
         <div className='bg-card rounded-lg border p-4'>
-          <div className='text-2xl font-bold'>3,521</div>
-          <div className='text-muted-foreground text-sm'>Umrah 2025</div>
+          <div className='text-2xl font-bold text-green-600'>3.521</div>
+          <div className='text-muted-foreground text-sm'>Umrah 2025 🕌</div>
         </div>
         <div className='bg-card rounded-lg border p-4'>
-          <div className='text-2xl font-bold'>2,156</div>
-          <div className='text-muted-foreground text-sm'>Hajj 2025</div>
+          <div className='text-2xl font-bold text-blue-600'>2.156</div>
+          <div className='text-muted-foreground text-sm'>Hajj 2025 🕋</div>
         </div>
         <div className='bg-card rounded-lg border p-4'>
-          <div className='text-2xl font-bold'>87%</div>
-          <div className='text-muted-foreground text-sm'>Active Rate</div>
+          <div className='text-2xl font-bold text-emerald-500'>87%</div>
+          <div className='text-muted-foreground text-sm'>Aktive Rate</div>
         </div>
       </div>
 
@@ -168,7 +176,7 @@ export default function ContactsPage() {
         <div className='relative flex-1'>
           <IconSearch className='text-muted-foreground absolute top-3 left-3 h-4 w-4' />
           <Input
-            placeholder='Search by name or email...'
+            placeholder='Nach Name oder E-Mail suchen...'
             className='pl-10'
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -177,23 +185,23 @@ export default function ContactsPage() {
         <Select value={selectedSegment} onValueChange={setSelectedSegment}>
           <SelectTrigger className='w-[200px]'>
             <IconFilter className='mr-2 h-4 w-4' />
-            <SelectValue placeholder='Filter by segment' />
+            <SelectValue placeholder='Nach Segment filtern' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='all'>All Segments</SelectItem>
-            <SelectItem value='umrah_2025'>Umrah 2025</SelectItem>
-            <SelectItem value='hajj_2025'>Hajj 2025</SelectItem>
-            <SelectItem value='general'>General</SelectItem>
+            <SelectItem value='all'>Alle Segmente</SelectItem>
+            <SelectItem value='umrah_2025'>🕌 Umrah 2025</SelectItem>
+            <SelectItem value='hajj_2025'>🕋 Hajj 2025</SelectItem>
+            <SelectItem value='general'>📝 Allgemein</SelectItem>
           </SelectContent>
         </Select>
         {selectedContacts.length > 0 && (
           <div className='flex items-center gap-2'>
-            <span className='text-muted-foreground text-sm'>
-              {selectedContacts.length} selected
+            <span className='text-muted-foreground text-sm font-medium'>
+              {selectedContacts.length} ausgewählt
             </span>
             <Button variant='outline' size='sm'>
               <IconMail className='mr-2 h-4 w-4' />
-              Email Selected
+              E-Mail an Auswahl
             </Button>
           </div>
         )}
@@ -214,15 +222,15 @@ export default function ContactsPage() {
                 />
               </TableHead>
               <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Segment</TableHead>
-              <TableHead>City</TableHead>
-              <TableHead>Budget</TableHead>
-              <TableHead className='text-center'>Emails</TableHead>
-              <TableHead className='text-center'>Opens</TableHead>
-              <TableHead className='text-center'>Clicks</TableHead>
+              <TableHead>E-Mail</TableHead>
+              <TableHead>Reise-Segment</TableHead>
+              <TableHead>Stadt</TableHead>
+              <TableHead>Budget (EUR)</TableHead>
+              <TableHead className='text-center'>📧 Gesendet</TableHead>
+              <TableHead className='text-center'>👀 Geöffnet</TableHead>
+              <TableHead className='text-center'>🖱️ Geklickt</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Last Activity</TableHead>
+              <TableHead>Letzte Aktivität</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -237,8 +245,14 @@ export default function ContactsPage() {
                 <TableCell className='font-medium'>{contact.name}</TableCell>
                 <TableCell>{contact.email}</TableCell>
                 <TableCell>
-                  <Badge className={getSegmentColor(contact.segment)}>
-                    {contact.segment.replace('_', ' ').toUpperCase()}
+                  <Badge
+                    className={`text-white ${getSegmentColor(contact.segment)}`}
+                  >
+                    {contact.segment === 'umrah_2025'
+                      ? '🕌 UMRAH 2025'
+                      : contact.segment === 'hajj_2025'
+                        ? '🕋 HAJJ 2025'
+                        : '📝 ALLGEMEIN'}
                   </Badge>
                 </TableCell>
                 <TableCell>{contact.city}</TableCell>
@@ -255,9 +269,9 @@ export default function ContactsPage() {
                 <TableCell>
                   <Badge
                     variant='outline'
-                    className={getStatusColor(contact.status)}
+                    className={`${getStatusColor(contact.status)} border-0 text-white`}
                   >
-                    {contact.status}
+                    {contact.status === 'active' ? '✅ AKTIV' : '⏸️ INAKTIV'}
                   </Badge>
                 </TableCell>
                 <TableCell className='text-muted-foreground'>
@@ -272,13 +286,17 @@ export default function ContactsPage() {
       {/* Pagination */}
       <div className='flex items-center justify-between'>
         <p className='text-muted-foreground text-sm'>
-          Showing 1-50 of 10,247 contacts
+          Zeige 1-50 von 10.247 Kontakten ({filteredContacts.length} gefiltert)
         </p>
         <div className='flex gap-2'>
           <Button variant='outline' size='sm'>
-            Previous
+            ← Zurück
           </Button>
-          <Button variant='outline' size='sm'>
+          <Button
+            variant='outline'
+            size='sm'
+            className='bg-blue-500 text-white'
+          >
             1
           </Button>
           <Button variant='outline' size='sm'>
@@ -287,14 +305,14 @@ export default function ContactsPage() {
           <Button variant='outline' size='sm'>
             3
           </Button>
-          <Button variant='outline' size='sm'>
+          <Button variant='outline' size='sm' disabled>
             ...
           </Button>
           <Button variant='outline' size='sm'>
             205
           </Button>
           <Button variant='outline' size='sm'>
-            Next
+            Weiter →
           </Button>
         </div>
       </div>

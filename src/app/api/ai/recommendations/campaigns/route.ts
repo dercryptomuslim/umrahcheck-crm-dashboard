@@ -340,6 +340,7 @@ export async function POST(request: NextRequest) {
           }
         },
         { status: 429 }
+      );
     }
 
     // Parse and validate request
@@ -357,6 +358,7 @@ export async function POST(request: NextRequest) {
       supabase,
       tenantId,
       params.target_segments
+    );
 
     if (customerProfiles.length === 0) {
       return NextResponse.json(
@@ -370,6 +372,7 @@ export async function POST(request: NextRequest) {
           }
         },
         { status: 404 }
+      );
     }
 
     // Fetch available campaign templates
@@ -380,6 +383,7 @@ export async function POST(request: NextRequest) {
         campaign_types: params.campaign_types,
         exclude_recent_campaigns: params.exclude_recent_campaigns
       }
+    );
 
     if (availableCampaigns.length === 0) {
       return NextResponse.json(
@@ -393,6 +397,7 @@ export async function POST(request: NextRequest) {
           }
         },
         { status: 404 }
+      );
     }
 
     // Initialize recommendations engine
@@ -408,12 +413,14 @@ export async function POST(request: NextRequest) {
           min_confidence: params.min_confidence,
           target_segments: params.target_segments
         }
+      );
 
     // Filter by urgency if specified
     let filteredRecommendations = recommendations;
     if (params.urgency_filter) {
       filteredRecommendations = recommendations.filter(
         (r) => r.urgency_level === params.urgency_filter
+      );
     }
 
     // Calculate target analysis
@@ -468,12 +475,14 @@ export async function POST(request: NextRequest) {
       filteredRecommendations,
       customerProfiles,
       targetAnalysis
+    );
 
     // Log campaign recommendations for analytics
     await logCampaignRecommendation(
       supabase,
       tenantId,
       filteredRecommendations
+    );
 
     const processingTime = Date.now() - startTime;
 
@@ -530,6 +539,7 @@ export async function POST(request: NextRequest) {
         }
       },
       { status: statusCode }
+    );
   }
 }
 
@@ -569,22 +579,27 @@ function generateOptimizationSuggestions(
   if (targetAnalysis.avg_engagement_score < 0.5) {
     suggestions.push(
       'Consider improving email subject lines and content personalization to boost engagement'
+    );
   }
 
   // Analyze campaign timing
   const emailCampaigns = recommendations.filter(
     (r) => r.campaign_type === 'email'
+  );
   if (emailCampaigns.length > 0) {
     suggestions.push(
       'Schedule email campaigns for Tuesday-Thursday, 10 AM - 2 PM for optimal open rates'
+    );
   }
 
   // Analyze segment diversity
   const uniqueSegments = Array.from(
     new Set(recommendations.map((r) => r.target_segment))
+  );
   if (uniqueSegments.length < 3) {
     suggestions.push(
       'Consider expanding campaign targeting to additional customer segments for broader reach'
+    );
   }
 
   // Analyze A/B testing opportunities
@@ -592,14 +607,17 @@ function generateOptimizationSuggestions(
   if (abTestCampaigns.length < recommendations.length * 0.5) {
     suggestions.push(
       'Implement A/B testing for more campaigns to optimize performance'
+    );
   }
 
   // Analyze urgency distribution
   const highUrgencyCampaigns = recommendations.filter((r) =>
     ['high', 'critical'].includes(r.urgency_level)
+  );
   if (highUrgencyCampaigns.length > recommendations.length * 0.7) {
     suggestions.push(
       'Balance campaign urgency levels to avoid customer fatigue'
+    );
   }
 
   return suggestions.slice(0, 5); // Return top 5 suggestions

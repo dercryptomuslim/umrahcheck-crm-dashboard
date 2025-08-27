@@ -7,6 +7,7 @@ import { KPISchema } from '@/types/customer360';
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_KEY! // Service key for server-side operations
+);
 
 // Helper to get user context from Clerk
 async function getAuthContext() {
@@ -78,11 +79,13 @@ export async function GET(request: NextRequest) {
     const bookings = bookingsData.data || [];
     const bookingsInPeriod = bookings.filter(
       (booking) => new Date(booking.booked_at || booking.created_at) >= dateFrom
+    );
 
     const revenueTotal = bookings.reduce((sum, b) => sum + (b.amount || 0), 0);
     const revenue30d = bookingsInPeriod.reduce(
       (sum, b) => sum + (b.amount || 0),
       0
+    );
 
     // 5. Process engagement data
     const engagement = engagementData.data || [];
@@ -138,12 +141,14 @@ export async function GET(request: NextRequest) {
           'X-Analytics-Version': '1.0.0'
         }
       }
+    );
   } catch (error) {
     // Handle auth errors
     if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
         { status: 401 }
+      );
     }
 
     // Handle other errors

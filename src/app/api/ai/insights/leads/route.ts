@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
     }
 
     // 4. Get recent lead scoring events for trend analysis
-    const { data: recentEvents, error: eventsError } = await supabase
+    const { data: recentEvents, error: eventsError } = await authContext.supabase
       .from('events')
       .select('contact_id, payload, occurred_at')
       .eq('tenant_id', authContext.tenantId)
@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
 
     // 5. Get engagement metrics for top contacts
     const topContactIds = (contacts || []).slice(0, limit).map((c) => c.id);
-    const { data: engagementData, error: engagementError } = await supabase
+    const { data: engagementData, error: engagementError } = await authContext.supabase
       .from('contact_engagement_metrics')
       .select('*')
       .in('contact_id', topContactIds)
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
     );
 
     // 6. Get recent activity for contacts
-    const { data: recentActivity, error: activityError } = await supabase
+    const { data: recentActivity, error: activityError } = await authContext.supabase
       .from('events')
       .select('contact_id, occurred_at')
       .in('contact_id', topContactIds)

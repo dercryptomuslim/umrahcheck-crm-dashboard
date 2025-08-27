@@ -6,6 +6,7 @@ import { currentUser } from '@clerk/nextjs/server';
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_KEY!
+);
 
 // Helper to get user context from Clerk
 async function getAuthContext() {
@@ -102,6 +103,7 @@ export async function GET(request: NextRequest) {
       const filteredBookings = (bookings || []).filter(
         (booking) =>
           new Date(booking.booked_at || booking.created_at) >= cutoffDate
+        );
 
       // Group by period
       const grouped = filteredBookings.reduce(
@@ -125,10 +127,12 @@ export async function GET(request: NextRequest) {
           return acc;
         },
         {} as Record<string, any>
+      );
 
       // Convert to array and sort
       return Object.values(grouped).sort((a: any, b: any) =>
         a.period.localeCompare(b.period)
+      );
     };
 
     // 5. Generate data for all periods
@@ -184,12 +188,14 @@ export async function GET(request: NextRequest) {
           'X-Analytics-Version': '1.0.0'
         }
       }
+    );
   } catch (error) {
     // Handle auth errors
     if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
         { status: 401 }
+      );
     }
 
     // Handle other errors

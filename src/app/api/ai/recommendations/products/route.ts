@@ -174,6 +174,7 @@ async function fetchAvailableProducts(
         price_category: product.price_category || 'mid-range',
         features: product.features || []
       })) || []
+    );
   } catch (error) {
     // Error logged: console.error('Error fetching available products:', error);
     throw new Error('Failed to fetch available products');
@@ -238,6 +239,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
         { status: 401 }
+      );
     }
 
     // Rate limiting
@@ -256,6 +258,7 @@ export async function POST(request: NextRequest) {
           }
         },
         { status: 429 }
+      );
     }
 
     // Parse and validate request
@@ -273,6 +276,7 @@ export async function POST(request: NextRequest) {
       supabase,
       tenantId,
       params.customer_id
+    );
 
     // Fetch available products with filters
     const availableProducts = await fetchAvailableProducts(supabase, tenantId, {
@@ -292,6 +296,7 @@ export async function POST(request: NextRequest) {
           }
         },
         { status: 404 }
+      );
     }
 
     // Initialize recommendations engine
@@ -309,6 +314,7 @@ export async function POST(request: NextRequest) {
           include_up_sell: params.include_up_sell,
           exclude_recent: params.exclude_recent
         }
+      );
 
     // Determine customer segment (simplified)
     const customerSegment = determineCustomerSegment(customerProfile);
@@ -339,6 +345,7 @@ export async function POST(request: NextRequest) {
     // Extract personalization factors
     const personalizationFactors = Array.from(
       new Set(recommendations.flatMap((r) => r.personalization_factors))
+    );
 
     // Log prediction for analytics
     await logPrediction(
@@ -346,6 +353,7 @@ export async function POST(request: NextRequest) {
       tenantId,
       customerProfile.customer_id,
       recommendations
+    );
 
     const processingTime = Date.now() - startTime;
 

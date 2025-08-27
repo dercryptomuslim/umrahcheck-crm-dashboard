@@ -111,6 +111,7 @@ async function fetchCustomerSegmentationData(
     if (options.analysis_period_days < 365) {
       const cutoffDate = new Date(
         Date.now() - options.analysis_period_days * 24 * 60 * 60 * 1000
+      );
       query = query.gte('last_activity_date', cutoffDate.toISOString());
     }
 
@@ -299,6 +300,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
         { status: 401 }
+      );
     }
 
     // Rate limiting
@@ -317,6 +319,7 @@ export async function POST(request: NextRequest) {
           }
         },
         { status: 429 }
+      );
     }
 
     // Parse and validate request
@@ -334,6 +337,7 @@ export async function POST(request: NextRequest) {
       supabase,
       tenantId,
       params
+    );
 
     if (customerData.length < params.segment_count * params.min_segment_size) {
       return NextResponse.json(
@@ -347,6 +351,7 @@ export async function POST(request: NextRequest) {
           }
         },
         { status: 400 }
+      );
     }
 
     // Calculate data quality score
@@ -415,6 +420,7 @@ export async function POST(request: NextRequest) {
         }
       },
       { status: statusCode }
+    );
   }
 }
 
@@ -433,6 +439,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
         { status: 401 }
+      );
     }
 
     // Rate limiting
@@ -451,6 +458,7 @@ export async function GET(request: NextRequest) {
           }
         },
         { status: 429 }
+      );
     }
 
     // Get tenant ID from headers or user context
@@ -527,5 +535,6 @@ export async function GET(request: NextRequest) {
         }
       },
       { status: 500 }
+    );
   }
 }

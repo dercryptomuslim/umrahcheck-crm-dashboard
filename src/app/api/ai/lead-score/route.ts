@@ -505,6 +505,7 @@ export async function POST(request: NextRequest) {
           details: error.errors
         },
         { status: 400 }
+      );
     }
 
     // Handle auth errors
@@ -512,6 +513,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
         { status: 401 }
+      );
     }
 
     // Handle other errors
@@ -522,6 +524,7 @@ export async function POST(request: NextRequest) {
         error: 'Failed to calculate lead score'
       },
       { status: 500 }
+    );
   }
 }
 

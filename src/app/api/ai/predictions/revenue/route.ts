@@ -102,6 +102,7 @@ export async function POST(request: NextRequest) {
           meta: { days_available: historicalData.length }
         },
         { status: 400 }
+      );
     }
 
     // Generate revenue forecast
@@ -112,11 +113,13 @@ export async function POST(request: NextRequest) {
         historicalData,
         params.forecast_days,
         params.confidence_level
+      );
 
     // Generate forecast summary
     const summary = await revenueForecaster.getForecastSummary(
       historicalData,
       params.forecast_days
+    );
 
     const processingTime = Date.now() - startTime;
 
@@ -181,6 +184,7 @@ export async function POST(request: NextRequest) {
         meta: { timestamp: new Date().toISOString() }
       },
       { status: 500 }
+    );
   }
 }
 
@@ -260,6 +264,7 @@ async function fetchHistoricalRevenueData(
     const dateString = d.toDateString();
     const existingData = revenueData.find(
       (rd) => rd.date.toDateString() === dateString
+    );
 
     if (existingData) {
       filledData.push(existingData);
@@ -313,4 +318,5 @@ export async function GET(request: NextRequest) {
       error: 'Method not allowed. Use POST to generate revenue predictions.'
     },
     { status: 405 }
+  );
 }

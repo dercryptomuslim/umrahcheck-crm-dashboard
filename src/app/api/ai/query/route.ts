@@ -293,11 +293,13 @@ export async function POST(request: NextRequest) {
       authContext.userId,
       validatedData.conversation_id,
       validatedData.query
+    );
 
     // 5. Parse natural language query
     const classification = queryParser.parseQuery(
       validatedData.query,
       validatedData.context
+    );
 
     // 6. Build SQL query
     const sqlBuilder = new SQLQueryBuilder(authContext.tenantId);
@@ -313,12 +315,14 @@ export async function POST(request: NextRequest) {
       sqlResult.sql,
       sqlResult.params,
       sqlResult.tables
+    );
 
     // 9. Format results
     const formattedResults = formatResults(
       queryResult.rows,
       sqlResult.visualization_type,
       sqlResult.expected_columns
+    );
 
     // 10. Generate suggestions for follow-up queries
     const suggestions =
@@ -415,6 +419,7 @@ export async function POST(request: NextRequest) {
           details: error.errors
         },
         { status: 400 }
+      );
     }
 
     // Handle auth errors
@@ -422,6 +427,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
         { status: 401 }
+      );
     }
 
     // Handle other errors
@@ -433,6 +439,7 @@ export async function POST(request: NextRequest) {
           error instanceof Error ? error.message : 'Failed to process query'
       },
       { status: 500 }
+    );
   }
 }
 

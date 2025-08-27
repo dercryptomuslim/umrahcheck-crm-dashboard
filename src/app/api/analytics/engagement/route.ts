@@ -6,6 +6,7 @@ import { currentUser } from '@clerk/nextjs/server';
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_KEY!
+);
 
 // Helper to get user context from Clerk
 async function getAuthContext() {
@@ -68,6 +69,7 @@ export async function GET(request: NextRequest) {
     const emailEvents = events.filter((e) => e.source === 'email');
     const campaignSentEvents = emailEvents.filter(
       (e) => e.type === 'campaign_sent'
+    );
     const emailOpens = emailEvents.filter((e) => e.type === 'opened');
     const emailClicks = emailEvents.filter((e) => e.type === 'clicked');
     const emailReplies = emailEvents.filter((e) => e.type === 'replied');
@@ -136,6 +138,7 @@ export async function GET(request: NextRequest) {
         return acc;
       },
       {} as Record<string, number>
+    );
 
     const topSources = Object.entries(sourceCounts)
       .map(([source, count]) => ({
@@ -153,6 +156,7 @@ export async function GET(request: NextRequest) {
         return acc;
       },
       {} as Record<string, number>
+    );
 
     const topTypes = Object.entries(typeCounts)
       .map(([type, count]) => ({
@@ -197,12 +201,14 @@ export async function GET(request: NextRequest) {
           'X-Analytics-Version': '1.0.0'
         }
       }
+    );
   } catch (error) {
     // Handle auth errors
     if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
         { status: 401 }
+      );
     }
 
     // Handle other errors
@@ -213,6 +219,7 @@ export async function GET(request: NextRequest) {
         error: 'Failed to generate engagement analytics'
       },
       { status: 500 }
+    );
   }
 }
 

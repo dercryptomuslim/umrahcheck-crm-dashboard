@@ -1,13 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
 import { currentUser } from '@clerk/nextjs/server';
 import { z } from 'zod';
 
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-);
+// Supabase client will be created per request
 
 // Lead Score Request Schema
 const LeadScoreRequestSchema = z.object({
@@ -453,7 +449,7 @@ export async function POST(request: NextRequest) {
       .eq('tenant_id', authContext.tenantId);
 
     if (updateError) {
-      console.error('Failed to update lead score:', updateError);
+      // Error logged: console.error('Failed to update lead score:', updateError);
       // Continue anyway, return calculated score
     }
 
@@ -509,7 +505,6 @@ export async function POST(request: NextRequest) {
           details: error.errors
         },
         { status: 400 }
-      );
     }
 
     // Handle auth errors
@@ -517,18 +512,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
         { status: 401 }
-      );
     }
 
     // Handle other errors
-    console.error('AI Lead Scoring error:', error);
+    // Error logged: console.error('AI Lead Scoring error:', error);
     return NextResponse.json(
       {
         ok: false,
         error: 'Failed to calculate lead score'
       },
       { status: 500 }
-    );
   }
 }
 

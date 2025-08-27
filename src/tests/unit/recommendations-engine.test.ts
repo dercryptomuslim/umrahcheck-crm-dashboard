@@ -90,7 +90,6 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateProductRecommendations(
         sampleCustomerProfile,
         sampleProducts
-      );
 
       expect(recommendations).toBeDefined();
       expect(Array.isArray(recommendations)).toBe(true);
@@ -102,7 +101,6 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateProductRecommendations(
         sampleCustomerProfile,
         sampleProducts
-      );
 
       const firstRec = recommendations[0];
       expect(firstRec).toHaveProperty('product_id');
@@ -122,7 +120,6 @@ describe('SmartRecommendationsEngine', () => {
         sampleCustomerProfile,
         sampleProducts,
         { max_recommendations: maxRecs }
-      );
 
       expect(recommendations.length).toBeLessThanOrEqual(maxRecs);
     });
@@ -133,7 +130,6 @@ describe('SmartRecommendationsEngine', () => {
         sampleCustomerProfile,
         sampleProducts,
         { min_confidence: minConfidence }
-      );
 
       recommendations.forEach((rec) => {
         expect(rec.confidence_score).toBeGreaterThanOrEqual(minConfidence);
@@ -144,15 +140,12 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateProductRecommendations(
         sampleCustomerProfile,
         sampleProducts
-      );
 
       // Should have higher confidence for Mecca products
       const meccaRecs = recommendations.filter(
         (r) => r.destination === 'Mecca'
-      );
       const otherRecs = recommendations.filter(
         (r) => r.destination !== 'Mecca'
-      );
 
       if (meccaRecs.length > 0 && otherRecs.length > 0) {
         const avgMeccaConfidence =
@@ -172,7 +165,6 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateProductRecommendations(
         sampleCustomerProfile,
         sampleProducts
-      );
 
       recommendations.forEach((rec) => {
         expect(rec.confidence_score).toBeGreaterThanOrEqual(0);
@@ -184,7 +176,6 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateProductRecommendations(
         sampleCustomerProfile,
         sampleProducts
-      );
 
       recommendations.forEach((rec) => {
         expect(rec.expected_revenue).toBeGreaterThan(0);
@@ -192,7 +183,6 @@ describe('SmartRecommendationsEngine', () => {
         const expectedRevenue = rec.price * rec.expected_conversion_rate;
         expect(Math.abs(rec.expected_revenue - expectedRevenue)).toBeLessThan(
           0.01
-        );
       });
     });
 
@@ -200,7 +190,6 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateProductRecommendations(
         sampleCustomerProfile,
         sampleProducts
-      );
 
       recommendations.forEach((rec) => {
         expect(['low', 'medium', 'high', 'urgent']).toContain(rec.priority);
@@ -211,7 +200,6 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateProductRecommendations(
         sampleCustomerProfile,
         sampleProducts
-      );
 
       recommendations.forEach((rec) => {
         expect(Array.isArray(rec.reasoning)).toBe(true);
@@ -229,7 +217,6 @@ describe('SmartRecommendationsEngine', () => {
         sampleCustomerProfile,
         sampleProducts,
         { include_cross_sell: true, include_up_sell: true }
-      );
 
       recommendations.forEach((rec) => {
         expect(rec.cross_sell_potential).toBeGreaterThanOrEqual(0);
@@ -259,22 +246,18 @@ describe('SmartRecommendationsEngine', () => {
         recentProfile,
         sampleProducts,
         { exclude_recent: true }
-      );
 
       // Should have fewer or no Mecca recommendations due to recent booking
       const meccaRecs = recommendations.filter(
         (r) => r.destination === 'Mecca'
-      );
       expect(meccaRecs.length).toBeLessThanOrEqual(
         sampleProducts.filter((p) => p.destination === 'Mecca').length
-      );
     });
 
     it('should sort recommendations by priority and confidence', async () => {
       const recommendations = await engine.generateProductRecommendations(
         sampleCustomerProfile,
         sampleProducts
-      );
 
       if (recommendations.length > 1) {
         for (let i = 1; i < recommendations.length; i++) {
@@ -299,7 +282,6 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateProductRecommendations(
         sampleCustomerProfile,
         []
-      );
 
       expect(recommendations).toEqual([]);
     });
@@ -316,7 +298,6 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateProductRecommendations(
         newCustomer,
         sampleProducts
-      );
 
       expect(recommendations).toBeDefined();
       expect(Array.isArray(recommendations)).toBe(true);
@@ -337,11 +318,9 @@ describe('SmartRecommendationsEngine', () => {
       const platinumRecs = await engine.generateProductRecommendations(
         platinumCustomer,
         sampleProducts
-      );
       const bronzeRecs = await engine.generateProductRecommendations(
         bronzeCustomer,
         sampleProducts
-      );
 
       if (platinumRecs.length > 0 && bronzeRecs.length > 0) {
         const avgPlatinumConfidence =
@@ -354,7 +333,6 @@ describe('SmartRecommendationsEngine', () => {
         // Platinum customers should generally get higher confidence recommendations
         expect(avgPlatinumConfidence).toBeGreaterThanOrEqual(
           avgBronzeConfidence
-        );
       }
     });
   });
@@ -380,7 +358,6 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateCampaignRecommendations(
         sampleCustomers,
         sampleCampaigns
-      );
 
       expect(recommendations).toBeDefined();
       expect(Array.isArray(recommendations)).toBe(true);
@@ -390,7 +367,6 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateCampaignRecommendations(
         sampleCustomers,
         sampleCampaigns
-      );
 
       if (recommendations.length > 0) {
         const firstRec = recommendations[0];
@@ -411,7 +387,6 @@ describe('SmartRecommendationsEngine', () => {
         sampleCustomers,
         sampleCampaigns,
         { max_campaigns: maxCampaigns }
-      );
 
       expect(recommendations.length).toBeLessThanOrEqual(maxCampaigns);
     });
@@ -420,7 +395,6 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateCampaignRecommendations(
         sampleCustomers,
         sampleCampaigns
-      );
 
       recommendations.forEach((rec) => {
         expect(rec.expected_open_rate).toBeGreaterThanOrEqual(0);
@@ -436,7 +410,6 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateCampaignRecommendations(
         [],
         sampleCampaigns
-      );
 
       expect(recommendations).toEqual([]);
     });
@@ -447,7 +420,6 @@ describe('SmartRecommendationsEngine', () => {
       const productRecs = await engine.generateProductRecommendations(
         sampleCustomerProfile,
         sampleProducts
-      );
 
       const campaignRecs = await engine.generateCampaignRecommendations(
         [sampleCustomerProfile],
@@ -465,13 +437,11 @@ describe('SmartRecommendationsEngine', () => {
             historical_conversion_rate: 0.05
           }
         ]
-      );
 
       const summary = await engine.generateRecommendationSummary(
         [sampleCustomerProfile],
         productRecs,
         campaignRecs
-      );
 
       expect(summary).toHaveProperty('total_recommendations');
       expect(summary).toHaveProperty('high_priority_count');
@@ -482,7 +452,6 @@ describe('SmartRecommendationsEngine', () => {
 
       expect(summary.total_recommendations).toBe(
         productRecs.length + campaignRecs.length
-      );
       expect(summary.expected_total_revenue).toBeGreaterThanOrEqual(0);
       expect(summary.avg_confidence_score).toBeGreaterThanOrEqual(0);
       expect(summary.avg_confidence_score).toBeLessThanOrEqual(1);
@@ -492,13 +461,11 @@ describe('SmartRecommendationsEngine', () => {
       const productRecs = await engine.generateProductRecommendations(
         sampleCustomerProfile,
         sampleProducts
-      );
 
       const summary = await engine.generateRecommendationSummary(
         [sampleCustomerProfile],
         productRecs,
         []
-      );
 
       expect(typeof summary.segment_breakdown).toBe('object');
       Object.values(summary.segment_breakdown).forEach((segmentData) => {
@@ -519,7 +486,6 @@ describe('SmartRecommendationsEngine', () => {
         sampleCustomerProfile,
         sampleProducts,
         { min_confidence: 1.5 } // Invalid value > 1
-      );
 
       // Should return empty array or handle gracefully
       expect(Array.isArray(recommendations)).toBe(true);
@@ -537,7 +503,6 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateProductRecommendations(
         extremeCustomer,
         sampleProducts
-      );
 
       expect(Array.isArray(recommendations)).toBe(true);
       recommendations.forEach((rec) => {
@@ -559,7 +524,6 @@ describe('SmartRecommendationsEngine', () => {
       const recommendations = await engine.generateProductRecommendations(
         sampleCustomerProfile,
         incompleteProducts
-      );
 
       expect(Array.isArray(recommendations)).toBe(true);
     });
@@ -572,7 +536,6 @@ describe('SmartRecommendationsEngine', () => {
       await engine.generateProductRecommendations(
         sampleCustomerProfile,
         sampleProducts
-      );
 
       const executionTime = Date.now() - startTime;
 
@@ -603,7 +566,6 @@ describe('SmartRecommendationsEngine', () => {
         sampleCustomerProfile,
         largeProductCatalog,
         { max_recommendations: 10 }
-      );
 
       const executionTime = Date.now() - startTime;
 

@@ -192,8 +192,6 @@ export class CustomerSegmentationEngine {
     // Validate input data
     if (customers.length < segment_count * min_segment_size) {
       throw new Error(
-        `Insufficient customer data. Need at least ${segment_count * min_segment_size} customers for ${segment_count} segments.`
-      );
     }
 
     // Perform RFM analysis if requested
@@ -206,26 +204,22 @@ export class CustomerSegmentationEngine {
     const advancedSegments = this.performAdvancedSegmentation(
       customers,
       segment_count
-    );
 
     // Combine and optimize segments
     const finalSegments = this.optimizeSegments(
       [...rfmSegments, ...advancedSegments],
       min_segment_size
-    );
 
     // Generate insights and recommendations
     const insights = this.generateSegmentInsights(finalSegments, customers);
     const recommendations = this.generateStrategicRecommendations(
       finalSegments,
       customers
-    );
 
     // Calculate quality metrics
     const qualityMetrics = this.calculateSegmentationQuality(
       finalSegments,
       customers
-    );
 
     return {
       analysis_id: crypto.randomUUID(),
@@ -275,17 +269,14 @@ export class CustomerSegmentationEngine {
           recency_score,
           frequency_score,
           monetary_score
-        );
         rfmSegments[segment].push(customer);
       }
-    );
 
     // Convert to CustomerSegment format
     return Object.entries(rfmSegments)
-      .filter(([_, customers]) => customers.length > 0)
+      .filter(([, customers]) => customers.length > 0)
       .map(([segmentName, segmentCustomers]) =>
         this.buildCustomerSegment(segmentName, segmentCustomers, 'rfm')
-      );
   }
 
   /**
@@ -298,7 +289,6 @@ export class CustomerSegmentationEngine {
     // Extract features for clustering
     const features = customers.map((customer) =>
       this.extractFeatureVector(customer)
-    );
 
     // Normalize features
     const normalizedFeatures = this.normalizeFeatures(features);
@@ -307,7 +297,6 @@ export class CustomerSegmentationEngine {
     const clusters = this.performKMeansClustering(
       normalizedFeatures,
       segmentCount
-    );
 
     // Build segments from clusters
     const segments: CustomerSegment[] = [];
@@ -318,7 +307,6 @@ export class CustomerSegmentationEngine {
           segmentName,
           clusterCustomers,
           'advanced'
-        );
         segments.push(segment);
       }
     });
@@ -397,7 +385,6 @@ export class CustomerSegmentationEngine {
         const range = maxs[index] - mins[index];
         return range === 0 ? 0 : (value - mins[index]) / range;
       })
-    );
   }
 
   /**
@@ -442,7 +429,6 @@ export class CustomerSegmentationEngine {
       const converged = centroids.every(
         (centroid, index) =>
           this.euclideanDistance(centroid, newCentroids[index]) < tolerance
-      );
 
       centroids = newCentroids;
 
@@ -576,7 +562,6 @@ export class CustomerSegmentationEngine {
     const insights = this.generateSegmentSpecificInsights(
       customers,
       characteristics
-    );
 
     // Calculate performance metrics
     const metrics = this.calculateSegmentMetrics(customers);
@@ -627,7 +612,6 @@ export class CustomerSegmentationEngine {
 
     return (
       Object.entries(frequency).sort(([, a], [, b]) => b - a)[0]?.[0] || ''
-    );
   }
 
   private getDistribution<T>(array: T[]): Record<string, number> {
@@ -651,7 +635,6 @@ export class CustomerSegmentationEngine {
     const recentlyActive = customers.filter(
       (c) =>
         Date.now() - c.last_activity_date.getTime() < 90 * 24 * 60 * 60 * 1000
-    );
 
     return recentlyActive.length / customers.length;
   }
@@ -709,13 +692,11 @@ export class CustomerSegmentationEngine {
     if (characteristics.avg_booking_frequency < 90) {
       insights.key_behaviors.push(
         'High booking frequency - books every 3 months'
-      );
     }
 
     if (characteristics.avg_booking_value > 3000) {
       insights.key_behaviors.push(
         'High-value bookings - premium customer segment'
-      );
     }
 
     // Identify opportunities
@@ -725,7 +706,6 @@ export class CustomerSegmentationEngine {
     if (highEngagementCustomers / customers.length > 0.7) {
       insights.opportunities.push(
         'High email engagement - excellent channel for promotions'
-      );
     }
 
     // Assess risks
@@ -742,12 +722,10 @@ export class CustomerSegmentationEngine {
     if (characteristics.avg_booking_value > 2000) {
       insights.recommended_strategies.push(
         'Target with premium packages and exclusive experiences'
-      );
     }
 
     insights.recommended_strategies.push(
       'Implement personalized email campaigns'
-    );
     insights.recommended_strategies.push('Monitor engagement metrics closely');
 
     return insights;
@@ -758,7 +736,6 @@ export class CustomerSegmentationEngine {
     const totalBookings = customers.reduce(
       (sum, c) => sum + c.total_bookings,
       0
-    );
     const avgReviewRating =
       customers
         .filter((c) => c.avg_review_rating !== undefined)
@@ -785,7 +762,6 @@ export class CustomerSegmentationEngine {
       (c) =>
         c.account_status === 'active' &&
         Date.now() - c.last_activity_date.getTime() < 90 * 24 * 60 * 60 * 1000
-    );
 
     return activeCustomers.length / customers.length;
   }
@@ -793,7 +769,6 @@ export class CustomerSegmentationEngine {
   private calculateNPS(customers: CustomerSegmentationData[]): number {
     const reviewCustomers = customers.filter(
       (c) => c.avg_review_rating !== undefined
-    );
     if (reviewCustomers.length === 0) return 0;
 
     const promoters = reviewCustomers.filter(
@@ -841,7 +816,6 @@ export class CustomerSegmentationEngine {
     const sumSquaredDiffs = point1.reduce(
       (sum, val, index) => sum + Math.pow(val - point2[index], 2),
       0
-    );
     return Math.sqrt(sumSquaredDiffs);
   }
 
@@ -895,7 +869,6 @@ export class CustomerSegmentationEngine {
       (a, b) =>
         b.avg_customer_value * b.customer_count -
         a.avg_customer_value * a.customer_count
-    );
   }
 
   private generateSegmentInsights(
@@ -904,17 +877,13 @@ export class CustomerSegmentationEngine {
   ) {
     const sortedBySize = [...segments].sort(
       (a, b) => b.customer_count - a.customer_count
-    );
     const sortedByValue = [...segments].sort(
       (a, b) => b.avg_customer_value - a.avg_customer_value
-    );
     const sortedByGrowth = [...segments].sort(
       (a, b) => b.growth_rate - a.growth_rate
-    );
     const highRisk = segments.filter((s) => s.churn_risk === 'high');
     const opportunities = segments.filter(
       (s) => s.engagement_level === 'high' && s.profitability === 'high'
-    );
 
     return {
       largest_segment: sortedBySize[0]?.segment_name || '',
@@ -934,7 +903,6 @@ export class CustomerSegmentationEngine {
     // High-value segment recommendations
     const highValueSegments = segments.filter(
       (s) => s.avg_customer_value > 3000
-    );
     if (highValueSegments.length > 0) {
       recommendations.push({
         priority: 'high' as const,
@@ -963,7 +931,6 @@ export class CustomerSegmentationEngine {
     // Growth opportunity recommendations
     const growthSegments = segments.filter(
       (s) => s.engagement_level === 'high' && s.growth_rate > 0.5
-    );
     if (growthSegments.length > 0) {
       recommendations.push({
         priority: 'high' as const,

@@ -68,7 +68,6 @@ export class RevenueForecaster {
     // Sort data by date
     const sortedData = historicalData.sort(
       (a, b) => a.date.getTime() - b.date.getTime()
-    );
 
     // Extract revenue series
     const revenue = sortedData.map((d) => d.amount);
@@ -81,7 +80,6 @@ export class RevenueForecaster {
       revenue,
       forecastDays,
       seasonality
-    );
 
     // Calculate confidence intervals
     const forecasts = this.calculateConfidenceIntervals(
@@ -89,13 +87,11 @@ export class RevenueForecaster {
       components,
       sortedData,
       confidenceLevel
-    );
 
     // Calculate forecasting metrics
     const metrics = await this.calculateMetrics(
       sortedData.slice(-Math.min(30, sortedData.length)),
       forecasts.slice(0, Math.min(30, forecasts.length))
-    );
 
     return {
       forecasts,
@@ -177,7 +173,6 @@ export class RevenueForecaster {
       weeklyVariance,
       monthlyVariance,
       yearlyVariance
-    );
 
     if (maxVariance === yearlyVariance) dominantCycle = 'yearly';
     else if (maxVariance === monthlyVariance) dominantCycle = 'monthly';
@@ -441,12 +436,10 @@ export class RevenueForecaster {
     const { forecasts, metrics } = await this.generateForecast(
       historicalData,
       days
-    );
 
     const totalForecast = forecasts.reduce(
       (sum, f) => sum + f.predicted_amount,
       0
-    );
     const currentPeriodRevenue = historicalData
       .slice(-days)
       .reduce((sum, d) => sum + d.amount, 0);
@@ -463,7 +456,6 @@ export class RevenueForecaster {
         return acc;
       },
       { up: 0, down: 0, stable: 0 }
-    );
 
     let trend: 'increasing' | 'decreasing' | 'stable';
     if (

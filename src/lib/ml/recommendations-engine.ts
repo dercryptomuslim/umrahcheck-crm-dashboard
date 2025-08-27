@@ -245,13 +245,11 @@ export class SmartRecommendationsEngine {
       const targetCustomers = this.getSegmentCustomers(
         profiles,
         campaign.target_segment
-      );
       if (targetCustomers.length === 0) continue;
 
       const confidence = this.calculateCampaignConfidence(
         targetCustomers,
         campaign
-      );
 
       if (confidence < min_confidence) {
         continue;
@@ -344,7 +342,6 @@ export class SmartRecommendationsEngine {
           this.getCustomerSegment(
             profiles.find((p) => p.customer_id === r.product_id)!
           ) === segment.segment_name
-      );
 
       segmentBreakdown[segment.segment_name] = {
         count: segmentRecommendations.length,
@@ -405,7 +402,6 @@ export class SmartRecommendationsEngine {
     const behavioralScore = this.calculateBehavioralSimilarity(
       profile,
       product
-    );
     confidence += behavioralScore * this.featureWeights.behavioral_similarity;
 
     // Content similarity (product features)
@@ -472,14 +468,12 @@ export class SmartRecommendationsEngine {
     const travelStyleMatch = this.getTravelStyleMatch(
       profile.travel_style,
       product.travel_style
-    );
     similarity += travelStyleMatch * 0.4;
 
     // Budget range alignment
     const budgetMatch = this.getBudgetRangeMatch(
       profile.budget_range,
       product.price_category
-    );
     similarity += budgetMatch * 0.3;
 
     // Service features alignment (if available)
@@ -487,7 +481,6 @@ export class SmartRecommendationsEngine {
       const featurePreference = this.calculateFeaturePreference(
         profile.booking_history,
         product.features
-      );
       similarity += featurePreference * 0.3;
     } else {
       similarity += 0.15; // Neutral score if no feature data
@@ -547,7 +540,6 @@ export class SmartRecommendationsEngine {
     const frequencyScore = Math.max(
       0,
       1 - profile.booking_frequency_days / 365
-    );
     likelihood += frequencyScore * 0.3;
 
     // Engagement score
@@ -586,7 +578,6 @@ export class SmartRecommendationsEngine {
       (booking) =>
         booking.destination === product.destination &&
         booking.booking_date >= recentDate
-    );
   }
 
   private generateProductReasoning(
@@ -598,8 +589,6 @@ export class SmartRecommendationsEngine {
 
     if (profile.preferred_destinations.includes(product.destination)) {
       reasons.push(
-        `Matches your preferred destination: ${product.destination}`
-      );
     }
 
     if (confidence > 0.8) {
@@ -650,7 +639,6 @@ export class SmartRecommendationsEngine {
     const recencyFactor = Math.max(
       0.5,
       1 - profile.last_booking_days_ago / 365
-    );
     conversionRate *= recencyFactor;
 
     return Math.max(0.01, Math.min(0.3, conversionRate)); // Between 1% and 30%
@@ -714,7 +702,6 @@ export class SmartRecommendationsEngine {
       (b) =>
         b.destination === product.destination &&
         b.package_type !== product.package_type
-    );
 
     let potential = hasComplementaryBookings ? 0.7 : 0.3;
 
@@ -737,7 +724,6 @@ export class SmartRecommendationsEngine {
         b.destination === product.destination &&
         this.getPackageTierValue(b.package_type) <
           this.getPackageTierValue(product.package_type)
-    );
 
     let potential = hasLowerTierBookings ? 0.8 : 0.2;
 
@@ -767,7 +753,6 @@ export class SmartRecommendationsEngine {
     const segmentFit = this.calculateSegmentFit(
       customers,
       campaign.target_segment
-    );
     const timingScore = this.calculateTimingScore(campaign);
 
     return avgEngagement * 0.4 + segmentFit * 0.4 + timingScore * 0.2;
@@ -1047,7 +1032,6 @@ export class SmartRecommendationsEngine {
 
     const dominantTravelStyle = this.getDominantValue(
       customers.map((c) => c.travel_style)
-    );
     characteristics.push(`Primary travel style: ${dominantTravelStyle}`);
 
     return characteristics;
@@ -1113,7 +1097,6 @@ export class SmartRecommendationsEngine {
     return (
       (avgCustomerValue * 0.1 * successProbability - estimatedCampaignCost) /
       estimatedCampaignCost
-    );
   }
 
   private getCustomerSegment(profile: CustomerProfile): string {
@@ -1126,7 +1109,6 @@ export class SmartRecommendationsEngine {
   ): number {
     const matchingCustomers = customers.filter(
       (c) => this.assignCustomerToSegment(c) === targetSegment
-    );
     return matchingCustomers.length / customers.length;
   }
 

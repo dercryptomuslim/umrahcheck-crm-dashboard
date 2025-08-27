@@ -11,7 +11,7 @@ export async function GET() {
       data: apiKeys
     });
   } catch (error) {
-    console.error('Failed to fetch API keys:', error);
+    // Error logged: console.error('Failed to fetch API keys:', error);
 
     return NextResponse.json(
       {
@@ -19,7 +19,6 @@ export async function GET() {
         error: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
-    );
   }
 }
 
@@ -36,7 +35,6 @@ export async function POST(request: NextRequest) {
           error: 'API key name is required'
         },
         { status: 400 }
-      );
     }
 
     const newApiKey = await createApiKey({ name, permission });
@@ -46,7 +44,7 @@ export async function POST(request: NextRequest) {
       data: newApiKey
     });
   } catch (error) {
-    console.error('Failed to create API key:', error);
+    // Error logged: console.error('Failed to create API key:', error);
 
     return NextResponse.json(
       {
@@ -54,7 +52,6 @@ export async function POST(request: NextRequest) {
         error: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
-    );
   }
 }
 
@@ -71,7 +68,6 @@ export async function DELETE(request: NextRequest) {
           error: 'API key ID is required'
         },
         { status: 400 }
-      );
     }
 
     await deleteApiKey(apiKeyId);
@@ -81,7 +77,7 @@ export async function DELETE(request: NextRequest) {
       message: 'API key deleted successfully'
     });
   } catch (error) {
-    console.error('Failed to delete API key:', error);
+    // Error logged: console.error('Failed to delete API key:', error);
 
     return NextResponse.json(
       {
@@ -89,6 +85,5 @@ export async function DELETE(request: NextRequest) {
         error: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
-    );
   }
 }

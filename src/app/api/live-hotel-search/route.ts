@@ -169,12 +169,10 @@ function generateHotelOffers(
     mockHotels.makkah,
     budget,
     preferredTier
-  );
   const filteredMedina = filterHotelsByBudget(
     mockHotels.medina,
     budget,
     preferredTier
-  );
 
   const offers: HotelOffer[] = [];
 
@@ -186,10 +184,8 @@ function generateHotelOffers(
     // Calculate prices with seasonal adjustment
     const makkahPricePerNight = Math.round(
       makkahHotel.base_price * seasonalMultiplier
-    );
     const medinaPricePerNight = Math.round(
       medinaHotel.base_price * seasonalMultiplier
-    );
 
     offers.push({
       id: `offer-${i + 1}`,
@@ -246,15 +242,8 @@ export async function POST(request: NextRequest) {
             'Missing required fields: email, budget, persons, checkIn, checkOut'
         },
         { status: 400 }
-      );
     }
 
-    console.log(
-      `🔍 Live hotel search for: ${email} | Budget: €${budget} | ${persons} persons`
-    );
-    console.log(
-      `📅 Searching: ${checkIn} to ${checkOut} | ${persons} adults, ${rooms} rooms`
-    );
 
     // Generate search ID
     const searchId = `search_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -274,10 +263,6 @@ export async function POST(request: NextRequest) {
 
     const processingTime = Date.now() - startTime;
 
-    console.log(`✅ Scraper completed: ${offers.length} offers generated`);
-    console.log(
-      `🎯 Processed in ${processingTime}ms | Source: autonomous_agent_fallback`
-    );
 
     const response: HotelSearchResponse = {
       success: true,
@@ -299,14 +284,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('❌ Hotel search API error:', error);
+    // Error logged: console.error('❌ Hotel search API error:', error);
     return NextResponse.json(
       {
         success: false,
         message: 'Internal server error during hotel search'
       },
       { status: 500 }
-    );
   }
 }
 

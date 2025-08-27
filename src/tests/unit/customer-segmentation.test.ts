@@ -297,7 +297,6 @@ describe('CustomerSegmentationEngine', () => {
         expect(segment.characteristics).toHaveProperty('top_destinations');
         expect(segment.characteristics).toHaveProperty(
           'preferred_package_types'
-        );
 
         // Validate segment insights
         expect(Array.isArray(segment.insights.key_behaviors)).toBe(true);
@@ -305,7 +304,6 @@ describe('CustomerSegmentationEngine', () => {
         expect(Array.isArray(segment.insights.risks)).toBe(true);
         expect(Array.isArray(segment.insights.recommended_strategies)).toBe(
           true
-        );
 
         // Validate segment metrics
         expect(typeof segment.metrics.lifetime_value).toBe('number');
@@ -321,7 +319,6 @@ describe('CustomerSegmentationEngine', () => {
         {
           segment_count: segmentCount
         }
-      );
 
       expect(analysis.segments.length).toBeLessThanOrEqual(segmentCount + 5); // RFM adds segments
     });
@@ -333,7 +330,6 @@ describe('CustomerSegmentationEngine', () => {
         {
           min_segment_size: minSegmentSize
         }
-      );
 
       analysis.segments.forEach((segment) => {
         expect(segment.customer_count).toBeGreaterThanOrEqual(minSegmentSize);
@@ -346,7 +342,6 @@ describe('CustomerSegmentationEngine', () => {
         {
           include_rfm: true
         }
-      );
 
       // Should have some RFM-based segments
       expect(analysis.segments.length).toBeGreaterThan(0);
@@ -357,7 +352,6 @@ describe('CustomerSegmentationEngine', () => {
         ['Champions', 'Loyal Customers', 'At Risk', 'Lost'].some((rfmName) =>
           name.includes(rfmName)
         )
-      );
       expect(hasRFMSegments).toBe(true);
     });
 
@@ -375,16 +369,13 @@ describe('CustomerSegmentationEngine', () => {
       // Validate that largest segment actually has the most customers
       const largestSegment = analysis.segments.find(
         (s) => s.segment_name === analysis.insights.largest_segment
-      );
       expect(largestSegment).toBeDefined();
       if (largestSegment) {
         const otherSegments = analysis.segments.filter(
           (s) => s.segment_name !== analysis.insights.largest_segment
-        );
         otherSegments.forEach((segment) => {
           expect(largestSegment.customer_count).toBeGreaterThanOrEqual(
             segment.customer_count
-          );
         });
       }
     });
@@ -422,25 +413,20 @@ describe('CustomerSegmentationEngine', () => {
       expect(typeof analysis.quality_metrics.silhouette_score).toBe('number');
       expect(typeof analysis.quality_metrics.davies_bouldin_index).toBe(
         'number'
-      );
       expect(typeof analysis.quality_metrics.calinski_harabasz_index).toBe(
         'number'
-      );
       expect(typeof analysis.quality_metrics.segment_stability).toBe('number');
       expect(typeof analysis.quality_metrics.confidence_level).toBe('number');
 
       // Validate score ranges
       expect(analysis.quality_metrics.silhouette_score).toBeGreaterThanOrEqual(
         -1
-      );
       expect(analysis.quality_metrics.silhouette_score).toBeLessThanOrEqual(1);
       expect(analysis.quality_metrics.segment_stability).toBeGreaterThanOrEqual(
         0
-      );
       expect(analysis.quality_metrics.segment_stability).toBeLessThanOrEqual(1);
       expect(analysis.quality_metrics.confidence_level).toBeGreaterThanOrEqual(
         0
-      );
       expect(analysis.quality_metrics.confidence_level).toBeLessThanOrEqual(1);
     });
   });
@@ -460,7 +446,6 @@ describe('CustomerSegmentationEngine', () => {
       // Check if inactive customers are in high-risk segments
       const highRiskSegments = analysis.segments.filter(
         (s: any) => s.churn_risk === 'high'
-      );
       expect(highRiskSegments.length).toBeGreaterThan(0);
     });
 
@@ -472,7 +457,6 @@ describe('CustomerSegmentationEngine', () => {
       // High-engagement customers should be in high-engagement segments
       const highEngagementSegments = analysis.segments.filter(
         (s: any) => s.engagement_level === 'high'
-      );
       expect(highEngagementSegments.length).toBeGreaterThan(0);
     });
 
@@ -492,7 +476,6 @@ describe('CustomerSegmentationEngine', () => {
       // High-value customers should be in high-profitability segments
       const highProfitabilitySegments = analysis.segments.filter(
         (s: any) => s.profitability === 'high'
-      );
       expect(highProfitabilitySegments.length).toBeGreaterThan(0);
     });
 
@@ -505,7 +488,6 @@ describe('CustomerSegmentationEngine', () => {
         const expectedAvg = segment.total_value / segment.customer_count;
         expect(Math.abs(segment.avg_customer_value - expectedAvg)).toBeLessThan(
           0.01
-        );
       });
     });
 
@@ -513,7 +495,6 @@ describe('CustomerSegmentationEngine', () => {
       analysis.segments.forEach((segment: any) => {
         expect(Array.isArray(segment.characteristics.top_destinations)).toBe(
           true
-        );
         expect(
           Array.isArray(segment.characteristics.preferred_package_types)
         ).toBe(true);
@@ -528,7 +509,6 @@ describe('CustomerSegmentationEngine', () => {
             expect(typeof type).toBe('string');
             expect(type.length).toBeGreaterThan(0);
           }
-        );
       });
     });
 

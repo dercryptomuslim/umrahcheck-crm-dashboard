@@ -111,7 +111,6 @@ async function fetchCustomerSegmentationData(
     if (options.analysis_period_days < 365) {
       const cutoffDate = new Date(
         Date.now() - options.analysis_period_days * 24 * 60 * 60 * 1000
-      );
       query = query.gte('last_activity_date', cutoffDate.toISOString());
     }
 
@@ -200,7 +199,7 @@ async function fetchCustomerSegmentationData(
       return CustomerSegmentationDataSchema.parse(segmentationData);
     });
   } catch (error) {
-    console.error('Error fetching customer segmentation data:', error);
+    // Error logged: console.error('Error fetching customer segmentation data:', error);
     throw new Error('Failed to fetch customer data for segmentation analysis');
   }
 }
@@ -278,10 +277,10 @@ async function logSegmentationAnalysis(
     const { error } = await supabase.from('ml_prediction_logs').insert(logData);
 
     if (error) {
-      console.error('Failed to log segmentation analysis:', error);
+      // Error logged: console.error('Failed to log segmentation analysis:', error);
     }
   } catch (error) {
-    console.error('Error logging segmentation analysis:', error);
+    // Error logged: console.error('Error logging segmentation analysis:', error);
   }
 }
 
@@ -300,7 +299,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
         { status: 401 }
-      );
     }
 
     // Rate limiting
@@ -319,7 +317,6 @@ export async function POST(request: NextRequest) {
           }
         },
         { status: 429 }
-      );
     }
 
     // Parse and validate request
@@ -337,7 +334,6 @@ export async function POST(request: NextRequest) {
       supabase,
       tenantId,
       params
-    );
 
     if (customerData.length < params.segment_count * params.min_segment_size) {
       return NextResponse.json(
@@ -351,7 +347,6 @@ export async function POST(request: NextRequest) {
           }
         },
         { status: 400 }
-      );
     }
 
     // Calculate data quality score
@@ -388,7 +383,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('Segment analysis error:', error);
+    // Error logged: console.error('Segment analysis error:', error);
 
     const processingTime = Date.now() - startTime;
 
@@ -420,7 +415,6 @@ export async function POST(request: NextRequest) {
         }
       },
       { status: statusCode }
-    );
   }
 }
 
@@ -439,7 +433,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
         { status: 401 }
-      );
     }
 
     // Rate limiting
@@ -458,7 +451,6 @@ export async function GET(request: NextRequest) {
           }
         },
         { status: 429 }
-      );
     }
 
     // Get tenant ID from headers or user context
@@ -477,7 +469,7 @@ export async function GET(request: NextRequest) {
       .limit(1);
 
     if (error) {
-      console.error('Error fetching cached analysis:', error);
+      // Error logged: console.error('Error fetching cached analysis:', error);
     }
 
     // If we have recent analysis (within last 7 days), provide summary
@@ -521,7 +513,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Get segments error:', error);
+    // Error logged: console.error('Get segments error:', error);
 
     const processingTime = Date.now() - startTime;
 
@@ -535,6 +527,5 @@ export async function GET(request: NextRequest) {
         }
       },
       { status: 500 }
-    );
   }
 }

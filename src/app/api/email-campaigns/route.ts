@@ -3,7 +3,6 @@ import { Resend } from 'resend';
 
 const resend = new Resend(
   process.env.RESEND_API_KEY || 're_GjayicTJ_96myT9YP6TKFs6w853hi7Kcv'
-);
 
 interface EmailCampaignRequest {
   campaign_type: 'welcome_back' | 'price_drop' | 'ramadan_special';
@@ -655,15 +654,10 @@ export async function POST(request: NextRequest) {
           message: 'Missing required fields: campaign_type, recipients'
         },
         { status: 400 }
-      );
     }
 
-    console.log(
-      `📧 Starting ${campaign_type} campaign for ${recipients} contacts`
-    );
 
     // Fetch live hotel prices (in production, this would be from database)
-    console.log('🔍 Fetching live hotel prices for email personalization...');
 
     // Simulate fetching hotel data
     await new Promise((resolve) => setTimeout(resolve, 200));
@@ -680,7 +674,6 @@ export async function POST(request: NextRequest) {
       campaign_type,
       hotelOffersWithAffiliates,
       language
-    );
 
     // Determine recipients (in production, query from database based on segment)
     const emailList = test_email
@@ -701,18 +694,12 @@ export async function POST(request: NextRequest) {
       batches.push(emailList.slice(i, i + batchSize));
     }
 
-    console.log(
-      `📤 Sending ${emailList.length} emails in ${batches.length} batches`
-    );
 
     let totalSent = 0;
     let totalFailed = 0;
 
     for (let i = 0; i < batches.length; i++) {
       const batch = batches[i];
-      console.log(
-        `📧 Sending batch ${i + 1}/${batches.length} (${batch.length} emails)`
-      );
 
       try {
         // Send batch using Resend
@@ -723,7 +710,6 @@ export async function POST(request: NextRequest) {
             subject: emailTemplate.subject,
             html: emailTemplate.html
           })
-        );
 
         const results = await Promise.allSettled(emailPromises);
 
@@ -737,23 +723,19 @@ export async function POST(request: NextRequest) {
         totalSent += batchSent;
         totalFailed += batchFailed;
 
-        console.log(`✅ Batch ${i + 1} sent successfully: ${batchSent} emails`);
 
         // Small delay between batches to respect rate limits
         if (i < batches.length - 1) {
           await new Promise((resolve) => setTimeout(resolve, 100));
         }
       } catch (error) {
-        console.error(`❌ Error sending batch ${i + 1}:`, error);
+        // Error logged: console.error(`❌ Error sending batch ${i + 1}:`, error);
         totalFailed += batch.length;
       }
     }
 
     const processingTime = Date.now() - startTime;
 
-    console.log(
-      `🎯 Campaign complete: ${totalSent} sent, ${totalFailed} failed in ${processingTime}ms`
-    );
 
     return NextResponse.json({
       success: true,
@@ -768,14 +750,13 @@ export async function POST(request: NextRequest) {
       message: `Successfully sent ${totalSent} emails for ${campaign_type} campaign`
     });
   } catch (error) {
-    console.error('❌ Email campaign API error:', error);
+    // Error logged: console.error('❌ Email campaign API error:', error);
     return NextResponse.json(
       {
         success: false,
         message: 'Internal server error during email campaign'
       },
       { status: 500 }
-    );
   }
 }
 

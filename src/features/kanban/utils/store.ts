@@ -91,5 +91,4 @@ export const useTaskStore = create<State & Actions>()(
       setCols: (newCols: Column[]) => set({ columns: newCols })
     }),
     { name: 'task-store', skipHydration: true }
-  )
-);
+  ));

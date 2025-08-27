@@ -21,7 +21,6 @@ function useCallbackRef<T extends (...args: never[]) => unknown>(
   return React.useMemo(
     () => ((...args) => callbackRef.current?.(...args)) as T,
     []
-  );
 }
 
 export { useCallbackRef };

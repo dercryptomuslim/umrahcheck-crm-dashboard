@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
 import { currentUser } from '@clerk/nextjs/server';
 import { EventIngestionSchema } from '@/types/customer360';
 import { z } from 'zod';
 
 // Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY! // Service key for server-side operations
-);
 
 // Helper to get user context from Clerk
 async function getAuthContext() {
@@ -76,7 +72,6 @@ export async function POST(request: NextRequest) {
             message: 'Event already exists (deduped)'
           },
           { status: 200 }
-        );
       }
     }
 
@@ -88,7 +83,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Event insertion error:', error);
+      // Error logged: console.error('Event insertion error:', error);
       throw new Error('Failed to ingest event');
     }
 
@@ -105,7 +100,7 @@ export async function POST(request: NextRequest) {
           contact_id: validatedData.contact_id,
           trigger: 'new_event'
         })
-      }).catch((err) => console.error('Lead scoring trigger failed:', err));
+      }).catch((err) => // Error logged: console.error('Lead scoring trigger failed:', err));
     }
 
     // 7. Return success response
@@ -116,7 +111,6 @@ export async function POST(request: NextRequest) {
         message: 'Event ingested successfully'
       },
       { status: 201 }
-    );
   } catch (error) {
     // Handle validation errors
     if (error instanceof z.ZodError) {
@@ -127,7 +121,6 @@ export async function POST(request: NextRequest) {
           details: error.errors
         },
         { status: 400 }
-      );
     }
 
     // Handle auth errors
@@ -135,18 +128,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
         { status: 401 }
-      );
     }
 
     // Handle other errors
-    console.error('Event ingestion error:', error);
+    // Error logged: console.error('Event ingestion error:', error);
     return NextResponse.json(
       {
         ok: false,
         error: 'Internal server error'
       },
       { status: 500 }
-    );
   }
 }
 

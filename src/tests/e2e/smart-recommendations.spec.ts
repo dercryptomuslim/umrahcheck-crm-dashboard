@@ -511,7 +511,6 @@ test.describe('Smart Recommendations Dashboard', () => {
     // Verify download
     expect(download.suggestedFilename()).toMatch(
       /smart-recommendations-\d{4}-\d{2}-\d{2}\.json/
-    );
   });
 
   test('should be responsive on mobile', async ({ page }) => {

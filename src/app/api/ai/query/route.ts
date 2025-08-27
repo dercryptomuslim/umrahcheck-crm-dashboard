@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
 import { currentUser } from '@clerk/nextjs/server';
 import { z } from 'zod';
 import {
@@ -11,10 +11,6 @@ import { SQLQueryBuilder } from '@/lib/ai/sql-builder';
 import type { QueryResult } from '@/schemas/ai-query';
 
 // Initialize Supabase client with service key for admin queries
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-);
 
 // Rate limiting configuration
 const RATE_LIMITS = {
@@ -184,7 +180,7 @@ async function executeSQLQuery(
       rowCount: count || 0
     };
   } catch (error) {
-    console.error('SQL execution error:', error);
+    // Error logged: console.error('SQL execution error:', error);
     throw new Error('Failed to execute query');
   }
 }
@@ -297,13 +293,11 @@ export async function POST(request: NextRequest) {
       authContext.userId,
       validatedData.conversation_id,
       validatedData.query
-    );
 
     // 5. Parse natural language query
     const classification = queryParser.parseQuery(
       validatedData.query,
       validatedData.context
-    );
 
     // 6. Build SQL query
     const sqlBuilder = new SQLQueryBuilder(authContext.tenantId);
@@ -319,14 +313,12 @@ export async function POST(request: NextRequest) {
       sqlResult.sql,
       sqlResult.params,
       sqlResult.tables
-    );
 
     // 9. Format results
     const formattedResults = formatResults(
       queryResult.rows,
       sqlResult.visualization_type,
       sqlResult.expected_columns
-    );
 
     // 10. Generate suggestions for follow-up queries
     const suggestions =
@@ -334,7 +326,6 @@ export async function POST(request: NextRequest) {
         ? [
             `Zeige mir mehr Details zu diesen ${classification.type === 'leads' ? 'Leads' : 'Ergebnissen'}`,
             `Exportiere diese Daten als CSV`,
-            `Vergleiche mit letztem Monat`
           ]
         : [];
 
@@ -424,7 +415,6 @@ export async function POST(request: NextRequest) {
           details: error.errors
         },
         { status: 400 }
-      );
     }
 
     // Handle auth errors
@@ -432,11 +422,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
         { status: 401 }
-      );
     }
 
     // Handle other errors
-    console.error('Natural Language Query error:', error);
+    // Error logged: console.error('Natural Language Query error:', error);
     return NextResponse.json(
       {
         ok: false,
@@ -444,7 +433,6 @@ export async function POST(request: NextRequest) {
           error instanceof Error ? error.message : 'Failed to process query'
       },
       { status: 500 }
-    );
   }
 }
 

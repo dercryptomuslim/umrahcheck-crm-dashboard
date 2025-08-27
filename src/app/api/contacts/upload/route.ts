@@ -147,8 +147,6 @@ function validateContact(contact: ContactRow, rowIndex: number): string[] {
     contact.budget_min > contact.budget_max
   ) {
     errors.push(
-      `Row ${rowIndex}: budget_min cannot be greater than budget_max`
-    );
   }
 
   return errors;
@@ -172,7 +170,6 @@ export async function POST(request: NextRequest) {
           message: 'No CSV file provided'
         },
         { status: 400 }
-      );
     }
 
     if (!file.name.endsWith('.csv')) {
@@ -182,12 +179,8 @@ export async function POST(request: NextRequest) {
           message: 'File must be a CSV'
         },
         { status: 400 }
-      );
     }
 
-    console.log(
-      `📤 Processing CSV upload: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`
-    );
 
     // Read file content
     const csvContent = await file.text();
@@ -203,10 +196,8 @@ export async function POST(request: NextRequest) {
           message: `CSV parsing error: ${error.message}`
         },
         { status: 400 }
-      );
     }
 
-    console.log(`📊 Parsed ${contacts.length} contacts from CSV`);
 
     const result: UploadResult = {
       total: contacts.length,
@@ -224,15 +215,9 @@ export async function POST(request: NextRequest) {
       batches.push(contacts.slice(i, i + batchSize));
     }
 
-    console.log(
-      `🔄 Processing ${batches.length} batches of max ${batchSize} contacts each`
-    );
 
     for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
       const batch = batches[batchIndex];
-      console.log(
-        `📦 Processing batch ${batchIndex + 1}/${batches.length} (${batch.length} contacts)`
-      );
 
       for (let i = 0; i < batch.length; i++) {
         const contact = batch[i];
@@ -253,10 +238,8 @@ export async function POST(request: NextRequest) {
           // Check for duplicate email
           const isDuplicate = existingContacts.some(
             (c) => c.email === contact.email
-          );
           if (isDuplicate) {
             result.duplicates++;
-            console.log(`⚠️ Duplicate email: ${contact.email}`);
             continue;
           }
 
@@ -287,16 +270,12 @@ export async function POST(request: NextRequest) {
           saveContacts(existingContacts);
 
           result.successful++;
-          console.log(`✅ Successfully imported: ${contact.email}`);
         } catch (error: any) {
           result.failed++;
           result.errors.push(
-            `Row ${globalRowIndex}: Unexpected error - ${error.message}`
-          );
-          console.error(
+          // Error logged: console.error(
             `❌ Unexpected error for contact ${contact.email}:`,
             error
-          );
         }
       }
 
@@ -308,9 +287,6 @@ export async function POST(request: NextRequest) {
 
     const processingTime = Date.now() - startTime;
 
-    console.log(
-      `🎯 CSV Import complete: ${result.successful} successful, ${result.failed} failed, ${result.duplicates} duplicates in ${processingTime}ms`
-    );
 
     return NextResponse.json({
       success: true,
@@ -319,7 +295,7 @@ export async function POST(request: NextRequest) {
       message: `Imported ${result.successful} contacts successfully`
     });
   } catch (error: any) {
-    console.error('❌ CSV Upload API error:', error);
+    // Error logged: console.error('❌ CSV Upload API error:', error);
     return NextResponse.json(
       {
         success: false,
@@ -327,7 +303,6 @@ export async function POST(request: NextRequest) {
         error: error.message
       },
       { status: 500 }
-    );
   }
 }
 

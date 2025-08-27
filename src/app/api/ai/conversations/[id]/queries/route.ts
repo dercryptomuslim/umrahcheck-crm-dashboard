@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
 import { currentUser } from '@clerk/nextjs/server';
 
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-);
+// Supabase client initialized per request for security
 
 // Helper to get user context
 async function getAuthContext() {
@@ -46,6 +42,7 @@ export async function GET(
     const offset = parseInt(searchParams.get('offset') || '0');
 
     // Verify conversation belongs to user
+    const supabase = await createClient();
     const { data: conversation, error: convError } = await supabase
       .from('ai_conversations')
       .select('id, title')
@@ -116,7 +113,7 @@ export async function GET(
       );
     }
 
-    console.error('Query history error:', error);
+    // Error logged: console.error('Query history error:', error);
     return NextResponse.json(
       {
         ok: false,

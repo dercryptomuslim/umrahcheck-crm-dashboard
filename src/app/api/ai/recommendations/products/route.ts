@@ -130,7 +130,7 @@ async function fetchCustomerProfile(
     // Validate the profile
     return CustomerProfileSchema.parse(profile);
   } catch (error) {
-    console.error('Error fetching customer profile:', error);
+    // Error logged: console.error('Error fetching customer profile:', error);
     throw new Error('Failed to fetch customer profile data');
   }
 }
@@ -174,9 +174,8 @@ async function fetchAvailableProducts(
         price_category: product.price_category || 'mid-range',
         features: product.features || []
       })) || []
-    );
   } catch (error) {
-    console.error('Error fetching available products:', error);
+    // Error logged: console.error('Error fetching available products:', error);
     throw new Error('Failed to fetch available products');
   }
 }
@@ -217,10 +216,10 @@ async function logPrediction(
     const { error } = await supabase.from('ml_prediction_logs').insert(logData);
 
     if (error) {
-      console.error('Failed to log prediction:', error);
+      // Error logged: console.error('Failed to log prediction:', error);
     }
   } catch (error) {
-    console.error('Error logging prediction:', error);
+    // Error logged: console.error('Error logging prediction:', error);
   }
 }
 
@@ -239,7 +238,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
         { status: 401 }
-      );
     }
 
     // Rate limiting
@@ -258,7 +256,6 @@ export async function POST(request: NextRequest) {
           }
         },
         { status: 429 }
-      );
     }
 
     // Parse and validate request
@@ -276,7 +273,6 @@ export async function POST(request: NextRequest) {
       supabase,
       tenantId,
       params.customer_id
-    );
 
     // Fetch available products with filters
     const availableProducts = await fetchAvailableProducts(supabase, tenantId, {
@@ -296,7 +292,6 @@ export async function POST(request: NextRequest) {
           }
         },
         { status: 404 }
-      );
     }
 
     // Initialize recommendations engine
@@ -314,7 +309,6 @@ export async function POST(request: NextRequest) {
           include_up_sell: params.include_up_sell,
           exclude_recent: params.exclude_recent
         }
-      );
 
     // Determine customer segment (simplified)
     const customerSegment = determineCustomerSegment(customerProfile);
@@ -345,7 +339,6 @@ export async function POST(request: NextRequest) {
     // Extract personalization factors
     const personalizationFactors = Array.from(
       new Set(recommendations.flatMap((r) => r.personalization_factors))
-    );
 
     // Log prediction for analytics
     await logPrediction(
@@ -353,7 +346,6 @@ export async function POST(request: NextRequest) {
       tenantId,
       customerProfile.customer_id,
       recommendations
-    );
 
     const processingTime = Date.now() - startTime;
 
@@ -381,7 +373,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('Product recommendations error:', error);
+    // Error logged: console.error('Product recommendations error:', error);
 
     const processingTime = Date.now() - startTime;
 
@@ -411,7 +403,6 @@ export async function POST(request: NextRequest) {
         }
       },
       { status: statusCode }
-    );
   }
 }
 

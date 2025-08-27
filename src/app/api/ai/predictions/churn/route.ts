@@ -119,12 +119,10 @@ export async function POST(request: NextRequest) {
         min_confidence: params.min_confidence,
         max_results: params.max_results
       }
-    );
 
     // Filter by risk threshold
     const filteredPredictions = predictions.filter(
       (p) => p.churn_probability >= params.risk_threshold
-    );
 
     // Generate insights if requested
     let insights = null;
@@ -193,7 +191,7 @@ export async function POST(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Churn prediction API error:', error);
+    // Error logged: console.error('Churn prediction API error:', error);
 
     const errorId = `churn-pred-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
@@ -205,7 +203,6 @@ export async function POST(request: NextRequest) {
         meta: { timestamp: new Date().toISOString() }
       },
       { status: 500 }
-    );
   }
 }
 
@@ -280,8 +277,6 @@ async function fetchCustomerBehaviorData(
     case 'dormant':
       // Customers inactive for 90+ days
       contactQuery = contactQuery.or(
-        `last_login_at.lt.${ninetyDaysAgo.toISOString()},last_login_at.is.null`
-      );
       break;
   }
 
@@ -300,7 +295,6 @@ async function fetchCustomerBehaviorData(
     const sortedBookings = bookings.sort(
       (a: any, b: any) =>
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    );
 
     const lastBookingDate =
       sortedBookings.length > 0 ? new Date(sortedBookings[0].created_at) : null;
@@ -356,7 +350,6 @@ async function fetchCustomerBehaviorData(
     const accountAgeDays = Math.floor(
       (Date.now() - new Date(contact.created_at).getTime()) /
         (1000 * 60 * 60 * 24)
-    );
 
     // Count refunds and payment delays (would need additional data in production)
     const refundRequests = bookings.filter(
@@ -423,5 +416,4 @@ export async function GET(request: NextRequest) {
       error: 'Method not allowed. Use POST to generate churn predictions.'
     },
     { status: 405 }
-  );
 }

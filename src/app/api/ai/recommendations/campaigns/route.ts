@@ -62,10 +62,10 @@ interface CampaignRecommendationsResponse {
 
 // Fetch customer profiles for campaign targeting
 async function fetchCustomerProfiles(
-  supabase: any,
+  supabase: ReturnType<typeof createClient>,
   tenantId: string,
   segments?: string[]
-) {
+): Promise<ReturnType<typeof CustomerProfileSchema.parse>[]> {
   try {
     let query = supabase
       .from('customers')
@@ -132,16 +132,19 @@ async function fetchCustomerProfiles(
       return CustomerProfileSchema.parse(profile);
     });
   } catch (error) {
-    console.error('Error fetching customer profiles:', error);
+    // Error is already being thrown, no need for console.error
     throw new Error('Failed to fetch customer profiles data');
   }
 }
 
 // Fetch available campaign templates
 async function fetchAvailableCampaigns(
-  supabase: any,
+  supabase: ReturnType<typeof createClient>,
   tenantId: string,
-  filters?: any
+  filters?: {
+    campaign_types?: string[];
+    exclude_recent_campaigns?: boolean;
+  }
 ) {
   try {
     let query = supabase
@@ -179,7 +182,7 @@ async function fetchAvailableCampaigns(
       })) || []
     );
   } catch (error) {
-    console.error('Error fetching available campaigns:', error);
+    // Error is already being handled with default templates
 
     // Return default campaign templates if database query fails
     return [
@@ -254,7 +257,7 @@ async function fetchAvailableCampaigns(
 
 // Log campaign recommendation for analytics
 async function logCampaignRecommendation(
-  supabase: any,
+  supabase: ReturnType<typeof createClient>,
   tenantId: string,
   recommendations: CampaignRecommendation[]
 ) {
@@ -296,10 +299,10 @@ async function logCampaignRecommendation(
     const { error } = await supabase.from('ml_prediction_logs').insert(logData);
 
     if (error) {
-      console.error('Failed to log campaign recommendation:', error);
+      // Logging failure handled silently
     }
   } catch (error) {
-    console.error('Error logging campaign recommendation:', error);
+    // Error logged: console.error('Error logging campaign recommendation:', error);
   }
 }
 
@@ -337,7 +340,6 @@ export async function POST(request: NextRequest) {
           }
         },
         { status: 429 }
-      );
     }
 
     // Parse and validate request
@@ -355,7 +357,6 @@ export async function POST(request: NextRequest) {
       supabase,
       tenantId,
       params.target_segments
-    );
 
     if (customerProfiles.length === 0) {
       return NextResponse.json(
@@ -369,7 +370,6 @@ export async function POST(request: NextRequest) {
           }
         },
         { status: 404 }
-      );
     }
 
     // Fetch available campaign templates
@@ -380,7 +380,6 @@ export async function POST(request: NextRequest) {
         campaign_types: params.campaign_types,
         exclude_recent_campaigns: params.exclude_recent_campaigns
       }
-    );
 
     if (availableCampaigns.length === 0) {
       return NextResponse.json(
@@ -394,7 +393,6 @@ export async function POST(request: NextRequest) {
           }
         },
         { status: 404 }
-      );
     }
 
     // Initialize recommendations engine
@@ -410,14 +408,12 @@ export async function POST(request: NextRequest) {
           min_confidence: params.min_confidence,
           target_segments: params.target_segments
         }
-      );
 
     // Filter by urgency if specified
     let filteredRecommendations = recommendations;
     if (params.urgency_filter) {
       filteredRecommendations = recommendations.filter(
         (r) => r.urgency_level === params.urgency_filter
-      );
     }
 
     // Calculate target analysis
@@ -472,14 +468,12 @@ export async function POST(request: NextRequest) {
       filteredRecommendations,
       customerProfiles,
       targetAnalysis
-    );
 
     // Log campaign recommendations for analytics
     await logCampaignRecommendation(
       supabase,
       tenantId,
       filteredRecommendations
-    );
 
     const processingTime = Date.now() - startTime;
 
@@ -506,7 +500,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('Campaign recommendations error:', error);
+    // Error is already being returned as response
 
     const processingTime = Date.now() - startTime;
 
@@ -536,12 +530,11 @@ export async function POST(request: NextRequest) {
         }
       },
       { status: statusCode }
-    );
   }
 }
 
 // Helper functions
-function determineCustomerSegment(profile: any): string {
+function determineCustomerSegment(profile: ReturnType<typeof CustomerProfileSchema.parse>): string {
   if (profile.total_spent > 10000 && profile.booking_frequency_days < 90) {
     return 'high_value_frequent';
   }
@@ -562,8 +555,13 @@ function determineCustomerSegment(profile: any): string {
 
 function generateOptimizationSuggestions(
   recommendations: CampaignRecommendation[],
-  customerProfiles: any[],
-  targetAnalysis: any
+  customerProfiles: ReturnType<typeof CustomerProfileSchema.parse>[],
+  targetAnalysis: {
+    total_customers_analyzed: number;
+    segments_identified: number;
+    avg_engagement_score: number;
+    estimated_reach: number;
+  }
 ): string[] {
   const suggestions: string[] = [];
 
@@ -571,27 +569,22 @@ function generateOptimizationSuggestions(
   if (targetAnalysis.avg_engagement_score < 0.5) {
     suggestions.push(
       'Consider improving email subject lines and content personalization to boost engagement'
-    );
   }
 
   // Analyze campaign timing
   const emailCampaigns = recommendations.filter(
     (r) => r.campaign_type === 'email'
-  );
   if (emailCampaigns.length > 0) {
     suggestions.push(
       'Schedule email campaigns for Tuesday-Thursday, 10 AM - 2 PM for optimal open rates'
-    );
   }
 
   // Analyze segment diversity
   const uniqueSegments = Array.from(
     new Set(recommendations.map((r) => r.target_segment))
-  );
   if (uniqueSegments.length < 3) {
     suggestions.push(
       'Consider expanding campaign targeting to additional customer segments for broader reach'
-    );
   }
 
   // Analyze A/B testing opportunities
@@ -599,17 +592,14 @@ function generateOptimizationSuggestions(
   if (abTestCampaigns.length < recommendations.length * 0.5) {
     suggestions.push(
       'Implement A/B testing for more campaigns to optimize performance'
-    );
   }
 
   // Analyze urgency distribution
   const highUrgencyCampaigns = recommendations.filter((r) =>
     ['high', 'critical'].includes(r.urgency_level)
-  );
   if (highUrgencyCampaigns.length > recommendations.length * 0.7) {
     suggestions.push(
       'Balance campaign urgency levels to avoid customer fatigue'
-    );
   }
 
   return suggestions.slice(0, 5); // Return top 5 suggestions

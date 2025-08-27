@@ -75,7 +75,6 @@ export const fakeProducts = {
     if (categories.length > 0) {
       products = products.filter((product) =>
         categories.includes(product.category)
-      );
     }
 
     // Search functionality across multiple fields

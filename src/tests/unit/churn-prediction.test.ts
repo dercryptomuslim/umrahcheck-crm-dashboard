@@ -88,7 +88,6 @@ describe('ChurnPredictor', () => {
       expect(prediction.confidence).toBeLessThanOrEqual(1);
       expect(['low', 'medium', 'high', 'critical']).toContain(
         prediction.risk_level
-      );
     });
 
     it('should identify high-risk customer correctly', () => {
@@ -402,7 +401,6 @@ describe('ChurnPredictor', () => {
       // Recent customer should have lower churn probability
       expect(recentPrediction.churn_probability).toBeLessThan(
         oldPrediction.churn_probability
-      );
     });
 
     it('should normalize frequency values correctly', () => {
@@ -423,7 +421,6 @@ describe('ChurnPredictor', () => {
       // Frequent customer should have lower churn probability
       expect(frequentPrediction.churn_probability).toBeLessThan(
         infrequentPrediction.churn_probability
-      );
     });
 
     it('should normalize monetary values correctly', () => {
@@ -445,10 +442,8 @@ describe('ChurnPredictor', () => {
       // High-value customer should have lower churn probability
       expect(highValuePrediction.churn_probability).toBeLessThan(
         lowValuePrediction.churn_probability
-      );
       expect(highValuePrediction.predicted_ltv_remaining).toBeGreaterThan(
         lowValuePrediction.predicted_ltv_remaining
-      );
     });
   });
 

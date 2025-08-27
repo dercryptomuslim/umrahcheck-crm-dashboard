@@ -44,7 +44,7 @@ export async function createApiKey(params: CreateApiKeyParams) {
 
     return result.data;
   } catch (error) {
-    console.error('Error creating API key:', error);
+    // Error logged: console.error('Error creating API key:', error);
     throw error;
   }
 }
@@ -63,7 +63,7 @@ export async function listApiKeys() {
 
     return result.data;
   } catch (error) {
-    console.error('Error listing API keys:', error);
+    // Error logged: console.error('Error listing API keys:', error);
     throw error;
   }
 }
@@ -82,7 +82,7 @@ export async function deleteApiKey(apiKeyId: string) {
 
     return result.data;
   } catch (error) {
-    console.error('Error deleting API key:', error);
+    // Error logged: console.error('Error deleting API key:', error);
     throw error;
   }
 }
@@ -124,7 +124,7 @@ export async function sendEmail(params: {
 
     return result.data;
   } catch (error) {
-    console.error('Error sending email:', error);
+    // Error logged: console.error('Error sending email:', error);
     throw error;
   }
 }

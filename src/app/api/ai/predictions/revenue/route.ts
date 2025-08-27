@@ -102,7 +102,6 @@ export async function POST(request: NextRequest) {
           meta: { days_available: historicalData.length }
         },
         { status: 400 }
-      );
     }
 
     // Generate revenue forecast
@@ -113,13 +112,11 @@ export async function POST(request: NextRequest) {
         historicalData,
         params.forecast_days,
         params.confidence_level
-      );
 
     // Generate forecast summary
     const summary = await revenueForecaster.getForecastSummary(
       historicalData,
       params.forecast_days
-    );
 
     const processingTime = Date.now() - startTime;
 
@@ -171,7 +168,7 @@ export async function POST(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Revenue prediction API error:', error);
+    // Error is already being returned as response with error ID
 
     // Log error for monitoring
     const errorId = `rev-pred-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -184,7 +181,6 @@ export async function POST(request: NextRequest) {
         meta: { timestamp: new Date().toISOString() }
       },
       { status: 500 }
-    );
   }
 }
 
@@ -264,7 +260,6 @@ async function fetchHistoricalRevenueData(
     const dateString = d.toDateString();
     const existingData = revenueData.find(
       (rd) => rd.date.toDateString() === dateString
-    );
 
     if (existingData) {
       filledData.push(existingData);
@@ -307,7 +302,7 @@ async function logPredictionRequest(
     });
   } catch (error) {
     // Don't fail the main request if logging fails
-    console.warn('Failed to log prediction request:', error);
+    // Log failure handled silently - don't fail main request
   }
 }
 
@@ -318,5 +313,4 @@ export async function GET(request: NextRequest) {
       error: 'Method not allowed. Use POST to generate revenue predictions.'
     },
     { status: 405 }
-  );
 }

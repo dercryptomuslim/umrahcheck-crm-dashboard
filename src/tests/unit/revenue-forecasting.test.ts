@@ -40,12 +40,10 @@ describe('RevenueForecaster', () => {
       const { forecasts } = await forecaster.generateForecast(
         sampleData,
         forecastDays
-      );
 
       expect(forecasts).toHaveLength(forecastDays);
       expect(forecasts[0].date.getTime()).toBeGreaterThan(
         sampleData[sampleData.length - 1].date.getTime()
-      );
     });
 
     it('should include confidence intervals', async () => {
@@ -55,13 +53,10 @@ describe('RevenueForecaster', () => {
         expect(forecast.confidence_lower).toBeGreaterThanOrEqual(0);
         expect(forecast.confidence_upper).toBeGreaterThan(
           forecast.predicted_amount
-        );
         expect(forecast.predicted_amount).toBeGreaterThanOrEqual(
           forecast.confidence_lower
-        );
         expect(forecast.predicted_amount).toBeLessThanOrEqual(
           forecast.confidence_upper
-        );
         expect(forecast.confidence_level).toBe(0.95);
       });
     });
@@ -81,7 +76,6 @@ describe('RevenueForecaster', () => {
       const { forecasts, seasonality } = await forecaster.generateForecast(
         sampleData,
         7
-      );
 
       expect(seasonality).toBeDefined();
       expect(seasonality.weekly_pattern).toHaveLength(7);
@@ -224,7 +218,6 @@ describe('RevenueForecaster', () => {
       const { forecasts, metrics } = await forecaster.generateForecast(
         flatData,
         5
-      );
 
       expect(forecasts).toHaveLength(5);
       expect(metrics).toBeDefined();
@@ -289,7 +282,6 @@ describe('RevenueForecaster', () => {
       // First forecast should be after the last date in historical data
       const lastHistoricalDate = Math.max(
         ...sampleData.map((d) => d.date.getTime())
-      );
       expect(forecasts[0].date.getTime()).toBeGreaterThan(lastHistoricalDate);
     });
 

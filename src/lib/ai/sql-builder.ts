@@ -41,7 +41,6 @@ export class SQLQueryBuilder {
           filters,
           timeframe,
           aggregation
-        );
       default:
         throw new Error(`Unsupported query type: ${type}`);
     }
@@ -95,7 +94,6 @@ export class SQLQueryBuilder {
         timeframe,
         'c.created_at',
         paramIndex
-      );
       baseQuery += ` AND ${timeClause.clause}`;
       params.push(...timeClause.params);
       paramIndex += timeClause.params.length;
@@ -121,7 +119,6 @@ export class SQLQueryBuilder {
           timeframe,
           'c.created_at',
           countParamIndex
-        );
         baseQuery += ` AND ${timeClause.clause}`;
       }
 
@@ -200,7 +197,6 @@ export class SQLQueryBuilder {
         timeframe,
         'b.created_at',
         paramIndex
-      );
       baseQuery += ` AND ${timeClause.clause}`;
       params.push(...timeClause.params);
       paramIndex += timeClause.params.length;
@@ -262,7 +258,6 @@ export class SQLQueryBuilder {
         timeframe,
         'b.created_at',
         paramIndex
-      );
       baseQuery += ` AND ${timeClause.clause}`;
       params.push(...timeClause.params);
       paramIndex += timeClause.params.length;
@@ -326,7 +321,6 @@ export class SQLQueryBuilder {
         timeframe,
         'c.created_at',
         paramIndex
-      );
       baseQuery += ` AND ${timeClause.clause}`;
       params.push(...timeClause.params);
       paramIndex += timeClause.params.length;

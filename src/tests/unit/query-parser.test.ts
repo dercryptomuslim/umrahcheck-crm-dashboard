@@ -8,7 +8,6 @@ describe('NaturalLanguageQueryParser', () => {
     it('should classify leads queries correctly', () => {
       const result = parser.parseQuery(
         'Zeige mir alle heißen Leads aus Deutschland'
-      );
 
       expect(result.type).toBe('leads');
       expect(result.confidence).toBeGreaterThan(0.5);
@@ -20,7 +19,6 @@ describe('NaturalLanguageQueryParser', () => {
     it('should classify booking queries correctly', () => {
       const result = parser.parseQuery(
         'Wie viele Buchungen haben wir diesen Monat?'
-      );
 
       expect(result.type).toBe('bookings');
       expect(result.intent).toBe('count');
@@ -30,7 +28,6 @@ describe('NaturalLanguageQueryParser', () => {
     it('should classify revenue queries correctly', () => {
       const result = parser.parseQuery(
         'Welcher Umsatz wurde in den letzten 30 Tagen generiert?'
-      );
 
       expect(result.type).toBe('revenue');
       expect(result.intent).toBe('sum');
@@ -84,7 +81,6 @@ describe('NaturalLanguageQueryParser', () => {
           operator: 'gte',
           value: 5000
         })
-      );
     });
   });
 
@@ -137,7 +133,6 @@ describe('NaturalLanguageQueryParser', () => {
           operator: 'between',
           value: [70, 100]
         })
-      );
     });
 
     it('should generate country filters correctly', () => {
@@ -149,24 +144,19 @@ describe('NaturalLanguageQueryParser', () => {
           operator: 'eq',
           value: 'Germany'
         })
-      );
     });
 
     it('should handle multiple filters', () => {
       const result = parser.parseQuery(
         'Heiße Leads aus Deutschland mit Budget über 2000 Euro'
-      );
 
       expect(result.filters).toHaveLength(3);
       expect(result.filters).toContainEqual(
         expect.objectContaining({ field: 'lead_score' })
-      );
       expect(result.filters).toContainEqual(
         expect.objectContaining({ field: 'country' })
-      );
       expect(result.filters).toContainEqual(
         expect.objectContaining({ field: 'budget_max' })
-      );
     });
   });
 
@@ -198,7 +188,6 @@ describe('NaturalLanguageQueryParser', () => {
     it('should give high confidence to clear, specific queries', () => {
       const result = parser.parseQuery(
         'Zeige mir alle heißen Leads aus Deutschland der letzten Woche'
-      );
 
       expect(result.confidence).toBeGreaterThan(0.8);
     });
@@ -212,7 +201,6 @@ describe('NaturalLanguageQueryParser', () => {
     it('should consider entity extraction in confidence', () => {
       const specificResult = parser.parseQuery(
         'Heiße Leads aus Deutschland mit 5000 Euro Budget'
-      );
       const vagueResult = parser.parseQuery('Zeige Leads');
 
       expect(specificResult.confidence).toBeGreaterThan(vagueResult.confidence);

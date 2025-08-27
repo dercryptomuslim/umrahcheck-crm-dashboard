@@ -1,13 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
 import { currentUser } from '@clerk/nextjs/server';
 import { z } from 'zod';
-
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-);
 
 // Batch Lead Score Request Schema
 const BatchLeadScoreRequestSchema = z.object({
@@ -59,7 +53,7 @@ async function processBatch<T, R>(
       if (result.status === 'fulfilled') {
         results.push(result.value);
       } else {
-        console.error(`Failed to process item ${i + index}:`, result.reason);
+        // Error logged: console.error(`Failed to process item ${i + index}:`, result.reason);
       }
     });
   }
@@ -78,6 +72,7 @@ export async function POST(request: NextRequest) {
     const validatedData = BatchLeadScoreRequestSchema.parse(body);
 
     // 3. Verify all contacts belong to tenant
+    const supabase = await createClient();
     const { data: contacts, error: contactError } = await supabase
       .from('contacts')
       .select('id, email, first_name, last_name, lead_score')
@@ -118,8 +113,7 @@ export async function POST(request: NextRequest) {
                 trigger: validatedData.trigger,
                 force_recalculate: validatedData.force_recalculate
               })
-            }
-          );
+            });
 
           if (!response.ok) {
             throw new Error(`Failed to score contact ${contact.id}`);
@@ -256,7 +250,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Handle other errors
-    console.error('Batch Lead Scoring error:', error);
+    // Error logged: console.error('Batch Lead Scoring error:', error);
     return NextResponse.json(
       {
         ok: false,

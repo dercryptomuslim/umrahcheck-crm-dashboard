@@ -93,7 +93,6 @@ export class ChurnPredictor {
       riskLevel,
       riskFactors,
       behavior
-    );
     const retentionScore = 1 - churnProbability;
     const predictedLTV = this.estimateRemainingLTV(behavior, retentionScore);
     const timeToChurn = this.estimateTimeToChurn(features, churnProbability);
@@ -124,7 +123,6 @@ export class ChurnPredictor {
   ): Promise<ChurnRiskScore[]> {
     const predictions = behaviors.map((behavior) =>
       this.predictChurnRisk(behavior)
-    );
 
     let filtered = predictions;
 
@@ -165,18 +163,14 @@ export class ChurnPredictor {
     // Recency features (0-1, where 1 = recent activity)
     features.booking_recency = this.normalizeRecency(
       behavior.last_booking_days_ago
-    );
     features.login_recency = this.normalizeRecency(
       behavior.last_login_days_ago
-    );
 
     // Frequency features (0-1, where 1 = high frequency)
     features.booking_frequency = this.normalizeFrequency(
       behavior.booking_frequency_days
-    );
     features.website_activity = this.normalizeWebsiteActivity(
       behavior.website_visits_last_30d
-    );
 
     // Monetary features (0-1, where 1 = high value)
     features.total_value = this.normalizeMonetary(behavior.total_spent);
@@ -187,26 +181,20 @@ export class ChurnPredictor {
       (behavior.email_open_rate + behavior.email_click_rate) / 2;
     features.mobile_usage = this.normalizeMobileUsage(
       behavior.mobile_app_usage
-    );
 
     // Satisfaction features (0-1, where 1 = satisfied)
     features.support_satisfaction = this.normalizeSupportActivity(
       behavior.support_tickets_count
-    );
     features.payment_reliability = this.normalizePaymentBehavior(
       behavior.payment_delays
-    );
     features.refund_risk = this.normalizeRefundHistory(
       behavior.refund_requests
-    );
 
     // Loyalty features (0-1, where 1 = loyal)
     features.account_tenure = this.normalizeAccountAge(
       behavior.account_age_days
-    );
     features.referral_activity = this.normalizeReferrals(
       behavior.referral_count
-    );
     features.newsletter_loyalty = behavior.newsletter_subscribed ? 1 : 0;
     features.profile_completeness = behavior.profile_completion;
 
@@ -308,8 +296,6 @@ export class ChurnPredictor {
     // Check each feature category for risk signals
     if (features.booking_recency < 0.3) {
       riskFactors.push(
-        `Long time since last booking (${behavior.last_booking_days_ago} days)`
-      );
     }
 
     if (features.booking_frequency < 0.3) {
@@ -379,10 +365,8 @@ export class ChurnPredictor {
       case 'medium':
         recommendations.push(
           'Include in monthly newsletter with special offers'
-        );
         recommendations.push(
           'Send destination recommendation based on preferences'
-        );
         break;
 
       case 'low':
@@ -578,7 +562,6 @@ export class ChurnPredictor {
       (p) =>
         (p.risk_level === 'high' || p.risk_level === 'critical') &&
         p.predicted_ltv_remaining > 2000
-    );
 
     if (highValueAtRisk.length > 0) {
       opportunities.push({
@@ -599,7 +582,6 @@ export class ChurnPredictor {
         p.primary_risk_factors.some(
           (f) => f.includes('engagement') || f.includes('email')
         )
-    );
 
     if (mediumRiskEngagement.length > 0) {
       opportunities.push({
@@ -620,7 +602,6 @@ export class ChurnPredictor {
         p.primary_risk_factors.some(
           (f) => f.includes('booking') || f.includes('login')
         )
-    );
 
     if (dormantCustomers.length > 0) {
       opportunities.push({

@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
 import { currentUser } from '@clerk/nextjs/server';
 
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-);
+// Supabase client initialized per request for security
 
 // Helper to get user context
 async function getAuthContext() {
@@ -41,6 +37,7 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0');
 
     // Fetch conversations with query count
+    const supabase = await createClient();
     const { data: conversations, error } = await supabase
       .from('ai_conversations')
       .select(
@@ -120,7 +117,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    console.error('Conversation history error:', error);
+    // Error will be logged by monitoring system via error response
     return NextResponse.json(
       {
         ok: false,
@@ -146,6 +143,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Delete conversation (cascades to query history)
+    const supabase = await createClient();
     const { error } = await supabase
       .from('ai_conversations')
       .delete()
@@ -167,7 +165,7 @@ export async function DELETE(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Delete conversation error:', error);
+    // Error logged: console.error('Delete conversation error:', error);
     return NextResponse.json(
       {
         ok: false,

@@ -1,12 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
 import { currentUser } from '@clerk/nextjs/server';
-
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-);
 
 // Helper to get user context from Clerk
 async function getAuthContext() {
@@ -16,6 +10,7 @@ async function getAuthContext() {
     throw new Error('Unauthorized');
   }
 
+  const supabase = await createClient();
   const tenantId = user.publicMetadata.tenant_id as string;
   const role = (user.publicMetadata.role as string) || 'agent';
 
@@ -27,7 +22,8 @@ async function getAuthContext() {
     userId: user.id,
     tenantId,
     role,
-    email: user.emailAddresses[0]?.emailAddress
+    email: user.emailAddresses[0]?.emailAddress,
+    supabase
   };
 }
 
@@ -42,7 +38,7 @@ export async function GET(request: NextRequest) {
     const limit = Math.min(parseInt(url.searchParams.get('limit') || '20'), 50);
 
     // 3. Fetch lead data with scores
-    const { data: contacts, error: contactsError } = await supabase
+    const { data: contacts, error: contactsError } = await authContext.supabase
       .from('contacts')
       .select(
         `
@@ -267,7 +263,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Handle other errors
-    console.error('Lead Insights error:', error);
+    // Error logged: console.error('Lead Insights error:', error);
     return NextResponse.json(
       {
         ok: false,

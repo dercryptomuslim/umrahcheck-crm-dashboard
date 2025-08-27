@@ -98,7 +98,6 @@ export class NaturalLanguageQueryParser {
       normalizedQuery,
       queryType,
       entities
-    );
 
     return {
       type: queryType,

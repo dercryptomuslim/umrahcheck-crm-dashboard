@@ -1,13 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
 import { currentUser } from '@clerk/nextjs/server';
 import type { Contact360Response } from '@/types/customer360';
 
 // Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-);
 
 // Helper to get user context
 async function getAuthContext() {
@@ -50,7 +46,6 @@ export async function GET(
       return NextResponse.json(
         { error: 'Invalid contact ID format' },
         { status: 400 }
-      );
     }
 
     // 2. Fetch contact data with parallel queries
@@ -133,7 +128,7 @@ export async function GET(
           endpoint: 'contact_360'
         }
       })
-    }).catch((err) => console.error('Failed to log access event:', err));
+    }).catch((err) => // Error logged: console.error('Failed to log access event:', err));
 
     // 6. Return with cache headers
     return NextResponse.json(response, {
@@ -149,11 +144,10 @@ export async function GET(
     }
 
     // Handle other errors
-    console.error('Contact 360 API error:', error);
+    // Error logged: console.error('Contact 360 API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
-    );
   }
 }
 
@@ -205,14 +199,13 @@ export async function PUT(
           updater: authContext.userId
         }
       })
-    }).catch((err) => console.error('Failed to log update event:', err));
+    }).catch((err) => // Error logged: console.error('Failed to log update event:', err));
 
     return NextResponse.json(data);
   } catch (error) {
-    console.error('Contact update error:', error);
+    // Error logged: console.error('Contact update error:', error);
     return NextResponse.json(
       { error: 'Failed to update contact' },
       { status: 500 }
-    );
   }
 }

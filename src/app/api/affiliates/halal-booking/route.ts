@@ -121,12 +121,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(
-      `🔗 Generating HalalBooking affiliate link for: ${hotel_name} in ${city}`
-    );
-    console.log(
-      `📅 Dates: ${check_in} to ${check_out} | ${adults} adults, ${rooms} rooms`
-    );
 
     // Generate unique tracking ID for this booking attempt
     const tracking_id = generateTrackingId(contact_email, campaign_id);
@@ -186,11 +180,6 @@ export async function POST(request: NextRequest) {
 
     const processing_time = Date.now() - startTime;
 
-    console.log(`✅ Affiliate link generated: ${tracking_id}`);
-    console.log(
-      `💰 Estimated commission: €${estimated_commission} (${HALAL_BOOKING_CONFIG.commission_rate * 100}%)`
-    );
-    console.log(`🔗 URL: ${affiliate_url.substring(0, 100)}...`);
 
     // In production, save tracking data to database for commission tracking
     // await saveAffiliateTracking({ tracking_id, contact_email, campaign_id, hotel_name, estimated_commission });
@@ -226,7 +215,7 @@ export async function POST(request: NextRequest) {
       message: `Affiliate link generated for ${hotel_name} booking`
     });
   } catch (error: any) {
-    console.error('❌ HalalBooking Affiliate API error:', error);
+    // Error logged: console.error('❌ HalalBooking Affiliate API error:', error);
     return NextResponse.json(
       {
         success: false,
